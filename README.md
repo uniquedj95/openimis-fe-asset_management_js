@@ -1,0 +1,1 @@
+# openimis-fe-asset_management_js
