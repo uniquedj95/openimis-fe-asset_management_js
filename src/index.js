@@ -5,11 +5,12 @@ import flatten from 'flat';
 import messages_en from './translations/en.json';
 import reducer from './reducer';
 import AssetMainMenu from './menus/AssetMainMenu';
-import { MODULE_NAME } from './constants';
-
-const ROUTE_ASSETS = 'assets';
-const ROUTE_ASSET = 'assets/asset';
-const ROUTE_ASSET_HISTORY = 'assets/asset/history';
+import {
+  MODULE_NAME,
+  ROUTE_ASSETS,
+  ROUTE_ASSET,
+  ROUTE_ASSET_HISTORY,
+} from './constants';
 
 const DEFAULT_CONFIG = {
   translations: [{ key: 'en', messages: flatten(messages_en) }],
