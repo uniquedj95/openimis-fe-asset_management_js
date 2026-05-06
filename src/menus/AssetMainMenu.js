@@ -1,6 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-props-no-spreading */
-
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
