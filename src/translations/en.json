@@ -3,6 +3,170 @@
     "mainMenu": "Asset Management",
     "menu": {
       "assets": "Assets"
+    },
+    "any": "Any",
+    "emptyString": "",
+
+    "assetsPage": {
+      "title": "Assets",
+      "helmet": "Assets",
+      "searcherResultsTitle": "{assetsTotalCount} Assets"
+    },
+    "assetPage": {
+      "title": {
+        "create": "Create Asset",
+        "edit": "Asset {code} {name}",
+        "view": "Asset {code} {name}"
+      },
+      "helmet": "Asset"
+    },
+    "assetHistoryPage": {
+      "title": "Assignment history — {code} {name}",
+      "helmet": "Asset assignment history",
+      "searcherResultsTitle": "{historyTotalCount} entries"
+    },
+
+    "asset": {
+      "code": "Code",
+      "name": "Name",
+      "serialNumber": "Serial number",
+      "deviceType": "Device type",
+      "status": "Status",
+      "imei": "IMEI",
+      "manufacturer": "Manufacturer",
+      "model": "Model",
+      "osVersion": "OS version",
+      "location": "Location",
+      "assignedTo": "Assigned to",
+      "assignedAt": "Assigned at",
+      "dateCreated": "Created on",
+      "dateUpdated": "Updated on",
+      "isDeleted": "Show historical",
+
+      "code.alreadyTaken": "The code is already taken",
+      "serialNumber.alreadyTaken": "The serial number is already taken",
+
+      "status.NEW": "New",
+      "status.IN_STOCK": "In stock",
+      "status.ASSIGNED": "Assigned",
+      "status.MAINTENANCE": "Maintenance",
+      "status.RETIRED": "Retired",
+      "status.LOST": "Lost",
+      "status.null": "Any",
+
+      "deviceType.PHONE": "Phone",
+      "deviceType.TABLET": "Tablet",
+      "deviceType.null": "Any",
+
+      "action.ASSIGN": "Assign",
+      "action.UNASSIGN": "Unassign",
+      "action.REASSIGN": "Reassign",
+      "action.null": "Any"
+    },
+
+    "assignment": {
+      "action": "Action",
+      "notes": "Notes",
+      "fromUser": "From",
+      "toUser": "To",
+      "performedBy": "Performed by",
+      "dateCreated": "Date"
+    },
+
+    "transition": {
+      "moveToInStock": "Move to stock",
+      "assign": "Assign",
+      "unassign": "Unassign",
+      "sendToMaintenance": "Send to maintenance",
+      "retire": "Retire",
+      "markLost": "Mark as lost"
+    },
+
+    "transition.tooltip": {
+      "moveToInStock": "Return this asset to stock",
+      "assign": "Assign this asset to a user",
+      "unassign": "Unassign this asset",
+      "sendToMaintenance": "Mark this asset as under maintenance",
+      "retire": "Retire this asset",
+      "markLost": "Mark this asset as lost",
+      "disabled": "This transition is not allowed from the current status",
+      "terminal": "This asset is in a terminal status and cannot be modified"
+    },
+
+    "mutation": {
+      "createAssetLabel": "Create asset {code}",
+      "updateAssetLabel": "Update asset {code}",
+      "deleteAssetLabel": "Delete asset {code}",
+      "assignAssetLabel": "Assign asset {code}",
+      "unassignAssetLabel": "Unassign asset {code}",
+      "transitionAssetLabel": "Change status of {code} to {status}"
+    },
+
+    "dialog": {
+      "delete": {
+        "title": "Delete asset {code} {name}",
+        "message": "Are you sure you want to delete this asset?"
+      },
+      "assign": {
+        "title": "Assign asset {code} {name}",
+        "message": "Select the user to assign this asset to."
+      },
+      "unassign": {
+        "title": "Unassign asset {code} {name}",
+        "message": "Are you sure you want to unassign this asset?"
+      },
+      "transition": {
+        "title": "Change status to {status}",
+        "message": "Confirm changing the status of {code} {name} to {status}."
+      },
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    },
+
+    "button": {
+      "create": "Create",
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "history": "History",
+      "back": "Back"
+    },
+
+    "tooltip": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "view": "Details",
+      "history": "Show assignment history",
+      "save.enabled": "Save changes",
+      "save.disabled": "Save changes"
+    },
+
+    "validation": {
+      "required": "This field is required",
+      "imei.invalid": "IMEI must be 14 or 15 digits",
+      "code.invalid": "Code must be alphanumeric"
+    },
+
+    "filter": {
+      "code": "Code",
+      "name": "Name",
+      "serialNumber": "Serial number",
+      "status": "Status",
+      "deviceType": "Device type",
+      "assignedTo": "Assigned to",
+      "location": "Location"
+    },
+
+    "export": {
+      "label": "Download",
+      "filename": "assets_export"
+    },
+
+    "picker": {
+      "status": "Status",
+      "deviceType": "Device type",
+      "assignmentAction": "Action"
     }
   }
 }
