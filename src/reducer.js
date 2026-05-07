@@ -12,7 +12,7 @@ import {
 } from '@openimis/fe-core';
 import {
   CLEAR, ERROR, REQUEST, SUCCESS,
-} from './util/action-type';
+} from './utils/action-type';
 
 export const ACTION_TYPE = {
   MUTATION: 'ASSET_MGMT_MUTATION',
