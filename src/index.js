@@ -6,6 +6,7 @@ import messages_en from './translations/en.json';
 import reducer from './reducer';
 import AssetMainMenu from './menus/AssetMainMenu';
 import DeviceTypePicker from './pickers/DeviceTypePicker';
+import AssetStatusPicker from './pickers/AssetStatusPicker';
 import {
   MODULE_NAME,
   ROUTE_ASSETS,
@@ -25,6 +26,7 @@ const DEFAULT_CONFIG = {
     { key: 'assetManagement.route.asset', ref: ROUTE_ASSET },
     { key: 'assetManagement.route.assetHistory', ref: ROUTE_ASSET_HISTORY },
     { key: 'assetManagement.DeviceTypePicker', ref: DeviceTypePicker },
+    { key: 'assetManagement.AssetStatusPicker', ref: AssetStatusPicker },
   ],
 };
 
