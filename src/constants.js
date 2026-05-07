@@ -4,8 +4,9 @@ export const ASSET_MANAGEMENT_MAIN_MENU_CONTRIBUTION_KEY = 'assetManagement.Main
 
 export const CONTAINS_LOOKUP = 'Icontains';
 export const DEFAULT_DEBOUNCE_TIME = 500;
-export const DEFAULT_PAGE_SIZE = 10;
+export const DEFAULT_PAGE_SIZE = 20;
 export const ROWS_PER_PAGE_OPTIONS = [10, 20, 50, 100];
+export const PICKER_QUERY_LIMIT = 50;
 export const EMPTY_STRING = '';
 
 // TODO - Revise Rights to match backend AssetsConfig
@@ -23,7 +24,7 @@ export const ROUTE_ASSETS = 'assets';
 export const ROUTE_ASSET = 'assets/asset';
 export const ROUTE_ASSET_HISTORY = 'assets/asset/history';
 
-// Asset status enum (mirrors backend FSM)
+// Asset status enum
 export const ASSET_STATUS = {
   NEW: 'NEW',
   IN_STOCK: 'IN_STOCK',

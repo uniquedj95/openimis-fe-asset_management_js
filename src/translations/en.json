@@ -167,6 +167,11 @@
       "status": "Status",
       "deviceType": "Device type",
       "assignmentAction": "Action"
+    },
+
+    "AssetPicker": {
+      "label": "Asset",
+      "placeholder": "Search assets by code, name or serial"
     }
   }
 }

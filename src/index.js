@@ -7,6 +7,9 @@ import reducer from './reducer';
 import AssetMainMenu from './menus/AssetMainMenu';
 import DeviceTypePicker from './pickers/DeviceTypePicker';
 import AssetStatusPicker from './pickers/AssetStatusPicker';
+import AssignmentActionPicker from './pickers/AssignmentActionPicker';
+import AssetPicker from './pickers/AssetPicker';
+import AssetIcon from './displays/AssetIcon';
 import {
   MODULE_NAME,
   ROUTE_ASSETS,
@@ -27,6 +30,9 @@ const DEFAULT_CONFIG = {
     { key: 'assetManagement.route.assetHistory', ref: ROUTE_ASSET_HISTORY },
     { key: 'assetManagement.DeviceTypePicker', ref: DeviceTypePicker },
     { key: 'assetManagement.AssetStatusPicker', ref: AssetStatusPicker },
+    { key: 'assetManagement.AssignmentActionPicker', ref: AssignmentActionPicker },
+    { key: 'assetManagement.AssetPicker', ref: AssetPicker },
+    { key: 'assetManagement.AssetIcon', ref: AssetIcon },
   ],
 };
 
