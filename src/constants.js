@@ -9,15 +9,15 @@ export const ROWS_PER_PAGE_OPTIONS = [10, 20, 50, 100];
 export const PICKER_QUERY_LIMIT = 50;
 export const EMPTY_STRING = '';
 
-// TODO - Revise Rights to match backend AssetsConfig
-export const RIGHT_ASSET_SEARCH = 101501;
-export const RIGHT_ASSET_VIEW = 101502;
-export const RIGHT_ASSET_CREATE = 101503;
-export const RIGHT_ASSET_UPDATE = 101504;
-export const RIGHT_ASSET_DELETE = 101505;
-export const RIGHT_ASSET_ASSIGN = 101506;
-export const RIGHT_ASSET_UNASSIGN = 101507;
-export const RIGHT_ASSET_HISTORY = 101508;
+// Rights — aligned with backend AssetsConfig (160001–160008).
+export const RIGHT_ASSET_SEARCH = 160001;
+export const RIGHT_ASSET_CREATE = 160002;
+export const RIGHT_ASSET_UPDATE = 160003;
+export const RIGHT_ASSET_DELETE = 160004;
+export const RIGHT_ASSET_ASSIGN = 160005;
+export const RIGHT_ASSET_UNASSIGN = 160006;
+export const RIGHT_ASSET_MAINTENANCE = 160007;
+export const RIGHT_ASSET_RETIRE = 160008;
 
 // Routes (registered under core.Router as pages land)
 export const ROUTE_ASSETS = 'assets';
