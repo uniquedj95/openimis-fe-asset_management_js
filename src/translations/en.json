@@ -10,7 +10,8 @@
     "assetsPage": {
       "title": "Assets",
       "helmet": "Assets",
-      "searcherResultsTitle": "{assetsTotalCount} Assets"
+      "searcherResultsTitle": "{assetsTotalCount} Assets",
+      "newAsset.tooltip": "Create a new asset"
     },
     "assetPage": {
       "title": {
