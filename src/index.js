@@ -10,6 +10,7 @@ import AssetStatusPicker from './pickers/AssetStatusPicker';
 import AssignmentActionPicker from './pickers/AssignmentActionPicker';
 import AssetPicker from './pickers/AssetPicker';
 import AssetIcon from './displays/AssetIcon';
+import AssetsPage from './pages/AssetsPage';
 import {
   MODULE_NAME,
   ROUTE_ASSETS,
@@ -22,7 +23,7 @@ const DEFAULT_CONFIG = {
   reducers: [{ key: MODULE_NAME, reducer }],
   'core.MainMenu': [{ name: 'AssetMainMenu', component: AssetMainMenu }],
   'core.Router': [
-    // TODO: page routes will be added here
+    { path: ROUTE_ASSETS, component: AssetsPage },
   ],
   refs: [
     { key: 'assetManagement.route.assets', ref: ROUTE_ASSETS },
