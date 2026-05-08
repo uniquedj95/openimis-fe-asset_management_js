@@ -1,6 +1,9 @@
 // Disable due to core architecture
 /* eslint-disable camelcase */
 /* eslint-disable import/prefer-default-export */
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+import { Devices } from '@material-ui/icons';
 import flatten from 'flat';
 import messages_en from './translations/en.json';
 import reducer from './reducer';
@@ -16,12 +19,22 @@ import {
   ROUTE_ASSETS,
   ROUTE_ASSET,
   ROUTE_ASSET_HISTORY,
+  RIGHT_ASSET_SEARCH,
 } from './constants';
 
 const DEFAULT_CONFIG = {
   translations: [{ key: 'en', messages: flatten(messages_en) }],
   reducers: [{ key: MODULE_NAME, reducer }],
   'core.MainMenu': [{ name: 'AssetMainMenu', component: AssetMainMenu }],
+  'assetManagement.MainMenu': [
+    {
+      id: 'assetManagement.assets',
+      text: <FormattedMessage module="assetManagement" id="menu.assets" />,
+      icon: <Devices />,
+      route: '/assets',
+      filter: (rights) => rights.includes(RIGHT_ASSET_SEARCH),
+    },
+  ],
   'core.Router': [
     { path: ROUTE_ASSETS, component: AssetsPage },
   ],
