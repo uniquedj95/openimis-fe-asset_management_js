@@ -173,6 +173,34 @@
     "AssetPicker": {
       "label": "Asset",
       "placeholder": "Search assets by code, name or serial"
-    }
+    },
+
+    "resetFilterTooltip": "Clear filters",
+    "refreshFilterTooltip": "Refresh",
+    "editButtonTooltip": "Edit",
+    "deleteButtonTooltip": "Delete",
+
+    "asset.delete.confirm.title": "Delete asset {code} {name}",
+    "asset.delete.confirm.message": "Are you sure you want to delete this asset? This action cannot be undone.",
+    "asset.delete.mutationLabel": "Delete asset {code}",
+    "asset.assign.mutationLabel": "Assign asset {code}",
+    "asset.unassign.mutationLabel": "Unassign asset {code}",
+    "asset.transition.mutationLabel": "Change status of {code} to {status}",
+    "asset.transition.confirm.title": "Change status to {status}",
+    "asset.transition.confirm.message": "Confirm changing the status of {code} {name} to {status}.",
+
+    "assignDialog.title": "Assign asset {code} {name}",
+    "assignDialog.reassignTitle": "Reassign asset {code} {name}",
+    "assignDialog.user": "Assigned user",
+    "assignDialog.notes": "Notes",
+    "assignDialog.forceReassign": "Force reassign (will unassign the current user)",
+    "assignDialog.submit": "Assign",
+    "assignDialog.cancel": "Cancel",
+
+    "unassignDialog.title": "Unassign asset {code} {name}",
+    "unassignDialog.message": "Are you sure you want to unassign this asset?",
+    "unassignDialog.notes": "Notes (optional)",
+    "unassignDialog.submit": "Unassign",
+    "unassignDialog.cancel": "Cancel"
   }
 }

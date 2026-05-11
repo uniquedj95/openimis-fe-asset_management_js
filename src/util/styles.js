@@ -10,3 +10,7 @@ export const defaultFilterStyles = (theme) => ({
     padding: theme.spacing(1),
   },
 });
+
+export const defaultDialogStyles = (theme) => ({
+  item: theme.paper.item,
+});
