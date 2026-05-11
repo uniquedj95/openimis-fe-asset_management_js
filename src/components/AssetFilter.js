@@ -106,6 +106,7 @@ function AssetFilter({
         <Grid item xs={2} className={classes.item}>
           <PublishedComponent
             pubRef="location.LocationPicker"
+            label={formatMessage(intl, MODULE_NAME, 'asset.location')}
             withNull
             value={filterValue('location')}
             onChange={(loc) => onChangeUuidFilter('location_Uuid')(loc?.uuid ?? null)}
@@ -117,7 +118,7 @@ function AssetFilter({
           <PublishedComponent
             pubRef="admin.UserPicker"
             module={MODULE_NAME}
-            label="asset.assignedTo"
+            label={formatMessage(intl, MODULE_NAME, 'asset.assignedTo')}
             withNull
             value={filterValue('assignedTo')}
             onChange={(user) => onChangeUuidFilter('assignedTo_Uuid')(user?.uuid ?? null)}
