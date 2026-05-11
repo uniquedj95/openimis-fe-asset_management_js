@@ -8,6 +8,7 @@ import { formatMessage, MainMenuContribution, withModulesManager } from '@openim
 import {
   RIGHT_ASSET_SEARCH,
   ASSET_MANAGEMENT_MAIN_MENU_CONTRIBUTION_KEY,
+  ROUTE_ASSETS,
 } from '../constants';
 
 function AssetMainMenu(props) {
@@ -15,7 +16,7 @@ function AssetMainMenu(props) {
     {
       text: formatMessage(props.intl, 'assetManagement', 'menu.assets'),
       icon: <Devices />,
-      route: '/assets',
+      route: `/${ROUTE_ASSETS}`,
       filter: (rights) => rights.includes(RIGHT_ASSET_SEARCH),
       id: 'assetManagement.assets',
     },

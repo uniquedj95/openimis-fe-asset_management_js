@@ -31,7 +31,7 @@ const DEFAULT_CONFIG = {
       id: 'assetManagement.assets',
       text: <FormattedMessage module="assetManagement" id="menu.assets" />,
       icon: <Devices />,
-      route: '/assets',
+      route: `/${ROUTE_ASSETS}`,
       filter: (rights) => rights.includes(RIGHT_ASSET_SEARCH),
     },
   ],
