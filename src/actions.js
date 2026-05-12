@@ -13,14 +13,13 @@ import { REQUEST, SUCCESS, ERROR } from './utils/action-type';
  * Fetch a paginated, filtered list of assets.
  *
  * `params` is the openIMIS Searcher params array (filter fragments + sort + paging).
- * The GraphQL root is `asset`; field names assumed:
- *   code_Icontains, name_Icontains, serialNumber_Icontains,
- *   deviceType, status, location_Uuid, assignedTo_Uuid, isDeleted.
- * Will be reconciled against the backend schema once the asset_management
- * backend lands.
+ * Matches the backend `assets` connection exposed by openimis-be-asset; supported
+ * filters: `id`, `name`, `name_Icontains`, `serialNumber`, `serialNumber_Icontains`,
+ * `status_Code`, `deviceType_Code`, `location_Id`, `assignedTo_Id`, `isDeleted`,
+ * plus `showHistory` and `orderBy`.
  */
 export function fetchAssets(params) {
-  const payload = formatPageQueryWithCount('asset', params, ASSET_PROJECTION);
+  const payload = formatPageQueryWithCount('assets', params, ASSET_PROJECTION);
   return graphql(payload, ACTION_TYPE.SEARCH_ASSETS);
 }
 
