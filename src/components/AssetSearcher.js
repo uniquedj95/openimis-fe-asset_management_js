@@ -176,13 +176,21 @@ function AssetSearcher({
     onDelete: (asset) => setAssetToDelete(asset),
   });
 
+  const formatStatus = (asset) => {
+    if (!asset.status) return '';
+    const key = `asset.status.${asset.status.code}`;
+    const translated = formatMessage(intl, MODULE_NAME, key);
+    if (!translated || translated === key || translated.endsWith(`.${key}`)) {
+      return asset.status.name || asset.status.code;
+    }
+    return translated;
+  };
+
   const itemFormatters = () => [
     (asset) => <AssetIcon deviceType={asset.deviceType?.code} />,
     (asset) => asset.name,
     (asset) => asset.serialNumber,
-    (asset) => (asset.status?.code
-      ? formatMessage(intl, MODULE_NAME, `asset.status.${asset.status.code}`)
-      : ''),
+    (asset) => formatStatus(asset),
     (asset) => asset.location?.name ?? '',
     (asset) => formatAssignedTo(asset),
     (asset) => formatDateFromISO(modulesManager, intl, asset.dateUpdated),
