@@ -77,7 +77,7 @@ function AssetSearcher({
   // ----- Delete: coreConfirm -> deleteAsset -----
   const openDeleteConfirm = () => coreConfirm(
     formatMessageWithValues(intl, MODULE_NAME, 'asset.delete.confirm.title', {
-      code: assetToDelete.code,
+      serialNumber: assetToDelete.serialNumber,
       name: assetToDelete.name,
     }),
     formatMessage(intl, MODULE_NAME, 'asset.delete.confirm.message'),
@@ -93,7 +93,7 @@ function AssetSearcher({
       status: formatMessage(intl, MODULE_NAME, `asset.status.${pendingTransition.target}`),
     }),
     formatMessageWithValues(intl, MODULE_NAME, 'asset.transition.confirm.message', {
-      code: pendingTransition.asset.code,
+      serialNumber: pendingTransition.asset.serialNumber,
       name: pendingTransition.asset.name,
       status: formatMessage(intl, MODULE_NAME, `asset.status.${pendingTransition.target}`),
     }),
@@ -109,20 +109,20 @@ function AssetSearcher({
       deleteAsset(
         assetToDelete,
         formatMessageWithValues(intl, MODULE_NAME, 'asset.delete.mutationLabel', {
-          code: assetToDelete.code,
+          serialNumber: assetToDelete.serialNumber,
         }),
       );
-      setDeletedAssetUuids([...deletedAssetUuids, assetToDelete.uuid]);
+      setDeletedAssetUuids([...deletedAssetUuids, assetToDelete.id]);
     }
     if (assetToDelete && confirmed !== null) setAssetToDelete(null);
 
     if (pendingTransition && confirmed) {
       transitionAssetStatus(
-        pendingTransition.asset.uuid,
+        pendingTransition.asset.id,
         pendingTransition.target,
         null,
         formatMessageWithValues(intl, MODULE_NAME, 'asset.transition.mutationLabel', {
-          code: pendingTransition.asset.code,
+          serialNumber: pendingTransition.asset.serialNumber,
           status: formatMessage(intl, MODULE_NAME, `asset.status.${pendingTransition.target}`),
         }),
       );
@@ -148,7 +148,6 @@ function AssetSearcher({
 
   const headers = () => [
     'asset.deviceType',
-    'asset.code',
     'asset.name',
     'asset.serialNumber',
     'asset.status',
@@ -178,12 +177,11 @@ function AssetSearcher({
   });
 
   const itemFormatters = () => [
-    (asset) => <AssetIcon deviceType={asset.deviceType} />,
-    (asset) => asset.code,
+    (asset) => <AssetIcon deviceType={asset.deviceType?.code} />,
     (asset) => asset.name,
     (asset) => asset.serialNumber,
-    (asset) => (asset.status
-      ? formatMessage(intl, MODULE_NAME, `asset.status.${asset.status}`)
+    (asset) => (asset.status?.code
+      ? formatMessage(intl, MODULE_NAME, `asset.status.${asset.status.code}`)
       : ''),
     (asset) => asset.location?.name ?? '',
     (asset) => formatAssignedTo(asset),
@@ -200,7 +198,6 @@ function AssetSearcher({
 
   const sorts = () => [
     ['deviceType', true],
-    ['code', true],
     ['name', true],
     ['serialNumber', true],
     ['status', true],
@@ -213,13 +210,13 @@ function AssetSearcher({
     modulesManager,
     history,
     'assetManagement.route.asset',
-    [asset?.uuid],
+    [asset?.id],
     newTab,
   );
 
-  const rowIdentifier = (asset) => asset.uuid;
+  const rowIdentifier = (asset) => asset.id;
 
-  const isRowDisabled = (_, asset) => deletedAssetUuids.includes(asset.uuid);
+  const isRowDisabled = (_, asset) => deletedAssetUuids.includes(asset.id);
 
   const defaultFilters = () => ({
     isDeleted: { value: false, filter: 'isDeleted: false' },
