@@ -47,16 +47,15 @@
       "code.alreadyTaken": "The code is already taken",
       "serialNumber.alreadyTaken": "The serial number is already taken",
 
-      "status.NEW": "New",
-      "status.IN_STOCK": "In stock",
-      "status.ASSIGNED": "Assigned",
-      "status.MAINTENANCE": "Maintenance",
-      "status.RETIRED": "Retired",
-      "status.LOST": "Lost",
+      "status.available": "Available",
+      "status.assigned": "Assigned",
+      "status.repair": "In repair",
+      "status.retired": "Retired",
+      "status.lost": "Lost",
       "status.null": "Any",
 
-      "deviceType.PHONE": "Phone",
-      "deviceType.TABLET": "Tablet",
+      "deviceType.phone": "Phone",
+      "deviceType.tablet": "Tablet",
       "deviceType.null": "Any",
 
       "action.ASSIGN": "Assign",

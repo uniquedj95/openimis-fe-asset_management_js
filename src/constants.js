@@ -24,42 +24,39 @@ export const ROUTE_ASSETS = 'assets';
 export const ROUTE_ASSET = 'assets/asset';
 export const ROUTE_ASSET_HISTORY = 'assets/asset/history';
 
-// Asset status enum
+// Asset status enum — codes match the backend `AssetStatus.code` seeds.
 export const ASSET_STATUS = {
-  NEW: 'NEW',
-  IN_STOCK: 'IN_STOCK',
-  ASSIGNED: 'ASSIGNED',
-  MAINTENANCE: 'MAINTENANCE',
-  RETIRED: 'RETIRED',
-  LOST: 'LOST',
+  AVAILABLE: 'available',
+  ASSIGNED: 'assigned',
+  REPAIR: 'repair',
+  RETIRED: 'retired',
+  LOST: 'lost',
 };
 
 export const ASSET_STATUS_LIST = [
-  ASSET_STATUS.NEW,
-  ASSET_STATUS.IN_STOCK,
+  ASSET_STATUS.AVAILABLE,
   ASSET_STATUS.ASSIGNED,
-  ASSET_STATUS.MAINTENANCE,
+  ASSET_STATUS.REPAIR,
   ASSET_STATUS.RETIRED,
   ASSET_STATUS.LOST,
 ];
 
 // Allowed transitions per status (terminal states map to []).
 export const STATUS_TRANSITIONS = {
-  [ASSET_STATUS.NEW]: [ASSET_STATUS.IN_STOCK, ASSET_STATUS.ASSIGNED, ASSET_STATUS.LOST],
-  [ASSET_STATUS.IN_STOCK]: [
+  [ASSET_STATUS.AVAILABLE]: [
     ASSET_STATUS.ASSIGNED,
-    ASSET_STATUS.MAINTENANCE,
+    ASSET_STATUS.REPAIR,
     ASSET_STATUS.RETIRED,
     ASSET_STATUS.LOST,
   ],
   [ASSET_STATUS.ASSIGNED]: [
-    ASSET_STATUS.IN_STOCK,
-    ASSET_STATUS.MAINTENANCE,
+    ASSET_STATUS.AVAILABLE,
+    ASSET_STATUS.REPAIR,
     ASSET_STATUS.RETIRED,
     ASSET_STATUS.LOST,
   ],
-  [ASSET_STATUS.MAINTENANCE]: [
-    ASSET_STATUS.IN_STOCK,
+  [ASSET_STATUS.REPAIR]: [
+    ASSET_STATUS.AVAILABLE,
     ASSET_STATUS.ASSIGNED,
     ASSET_STATUS.RETIRED,
     ASSET_STATUS.LOST,
@@ -83,10 +80,10 @@ export const ASSIGNMENT_ACTION_LIST = [
   ASSIGNMENT_ACTION.REASSIGN,
 ];
 
-// Device type enum
+// Device type enum — codes match the backend `DeviceType.code` seeds.
 export const DEVICE_TYPE = {
-  PHONE: 'PHONE',
-  TABLET: 'TABLET',
+  PHONE: 'phone',
+  TABLET: 'tablet',
 };
 
 export const DEVICE_TYPES = [DEVICE_TYPE.PHONE, DEVICE_TYPE.TABLET];
