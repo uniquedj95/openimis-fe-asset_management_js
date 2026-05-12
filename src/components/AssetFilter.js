@@ -34,17 +34,6 @@ function AssetFilter({
     debouncedOnChangeFilters([{ id: name, value, filter: fragment }]);
   };
 
-  const onChangeEnumFilter = (name) => (value) => {
-    onChangeFilters([
-      {
-        id: name,
-        value,
-        // null clears the filter; otherwise emit unquoted enum literal.
-        filter: value ? `${name}: ${value}` : null,
-      },
-    ]);
-  };
-
   const onChangeUuidFilter = (name) => (uuid) => {
     onChangeFilters([
       {
@@ -65,14 +54,6 @@ function AssetFilter({
       <Grid item xs={2} className={classes.item}>
         <TextInput
           module={MODULE_NAME}
-          label="asset.code"
-          value={filterTextFieldValue('code')}
-          onChange={onChangeStringFilter('code', CONTAINS_LOOKUP)}
-        />
-      </Grid>
-      <Grid item xs={2} className={classes.item}>
-        <TextInput
-          module={MODULE_NAME}
           label="asset.name"
           value={filterTextFieldValue('name')}
           onChange={onChangeStringFilter('name', CONTAINS_LOOKUP)}
@@ -88,14 +69,18 @@ function AssetFilter({
       </Grid>
       <Grid item xs={2} className={classes.item}>
         <DeviceTypePicker
-          value={filterValue('deviceType')}
-          onChange={onChangeEnumFilter('deviceType')}
+          value={filterValue('deviceType_Code')}
+          onChange={onChangeStringFilter('deviceType_Code')}
+          nullLabel="any"
+          withNull
         />
       </Grid>
       <Grid item xs={2} className={classes.item}>
         <AssetStatusPicker
-          value={filterValue('status')}
-          onChange={onChangeEnumFilter('status')}
+          value={filterValue('status_Code')}
+          onChange={onChangeStringFilter('status_Code')}
+          nullLabel="any"
+          withNull
         />
       </Grid>
       {modulesManager.getRef('location.LocationPicker') && (
@@ -105,7 +90,7 @@ function AssetFilter({
             label={formatMessage(intl, MODULE_NAME, 'asset.location')}
             withNull
             value={filterValue('location')}
-            onChange={(loc) => onChangeUuidFilter('location_Uuid')(loc?.uuid ?? null)}
+            onChange={(loc) => onChangeUuidFilter('location_Id')(loc?.id ?? null)}
           />
         </Grid>
       )}
@@ -117,7 +102,7 @@ function AssetFilter({
             label={formatMessage(intl, MODULE_NAME, 'asset.assignedTo')}
             withNull
             value={filterValue('assignedTo')}
-            onChange={(user) => onChangeUuidFilter('assignedTo_Uuid')(user?.uuid ?? null)}
+            onChange={(user) => onChangeUuidFilter('assignedTo_Id')(user?.id ?? null)}
           />
         </Grid>
       )}

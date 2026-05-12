@@ -92,25 +92,18 @@ export const DEVICE_TYPE = {
 export const DEVICE_TYPES = [DEVICE_TYPE.PHONE, DEVICE_TYPE.TABLET];
 
 // GraphQL projections — single source of truth for queries and pickers.
-// Kept as joined strings so they can be embedded directly in queries
+// Mirrors the AssetGQLType exposed by openimis-be-asset.
 export const ASSET_PROJECTION = [
   'id',
-  'uuid',
-  'code',
   'name',
   'serialNumber',
-  'deviceType',
-  'status',
-  'imei',
-  'manufacturer',
-  'model',
-  'osVersion',
-  'assignedAt',
   'dateCreated',
   'dateUpdated',
   'isDeleted',
+  'deviceType { id code name }',
+  'status { id code name canAssign }',
   'location { id uuid code name type }',
-  'assignedTo { id uuid lastName otherNames }',
+  'assignedTo { id username lastName otherNames }',
 ];
 
 export const ASSIGNMENT_PROJECTION = [

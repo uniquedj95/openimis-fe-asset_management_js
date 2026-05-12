@@ -64,7 +64,7 @@ export default function buildAssetRowActions({
         size="small"
         onClick={(e) => {
           stop(e);
-          historyPush(modulesManager, history, 'assetManagement.route.asset', [asset.uuid]);
+          historyPush(modulesManager, history, 'assetManagement.route.asset', [asset.id]);
         }}
       >
         <VisibilityIcon />
@@ -75,7 +75,7 @@ export default function buildAssetRowActions({
   const assign = (asset) => {
     if (!onAssign) return null;
     if (!rights.includes(RIGHT_ASSET_ASSIGN)) return null;
-    if (!canTransition(asset.status, ASSET_STATUS.ASSIGNED)) return null;
+    if (!canTransition(asset.status?.code, ASSET_STATUS.ASSIGNED)) return null;
     return (
       <Tooltip title={t('transition.tooltip.assign')}>
         <IconButton
@@ -91,7 +91,7 @@ export default function buildAssetRowActions({
   const unassign = (asset) => {
     if (!onUnassign) return null;
     if (!rights.includes(RIGHT_ASSET_UNASSIGN)) return null;
-    if (asset.status !== ASSET_STATUS.ASSIGNED) return null;
+    if (asset.status?.code !== ASSET_STATUS.ASSIGNED) return null;
     return (
       <Tooltip title={t('transition.tooltip.unassign')}>
         <IconButton
@@ -113,7 +113,7 @@ export default function buildAssetRowActions({
     function transitionFormatter(asset) {
       if (!onTransition) return null;
       if (rightCode != null && !rights.includes(rightCode)) return null;
-      if (!canTransition(asset.status, target)) return null;
+      if (!canTransition(asset.status?.code, target)) return null;
       return (
         <Tooltip title={t(tooltipKey)}>
           <IconButton
@@ -161,7 +161,7 @@ export default function buildAssetRowActions({
   const del = (asset) => {
     if (!onDelete) return null;
     if (!rights.includes(RIGHT_ASSET_DELETE)) return null;
-    if (isTerminal(asset.status)) return null;
+    if (isTerminal(asset.status?.code)) return null;
     if (asset.isDeleted) return null;
     return (
       <Tooltip title={t('tooltip.delete')}>
