@@ -73,9 +73,9 @@ function reducer(state = initialState, action) {
         ...state,
         fetchingAssets: false,
         fetchedAssets: true,
-        assets: parseData(action.payload.data.asset),
-        assetsPageInfo: pageInfo(action.payload.data.asset),
-        assetsTotalCount: action.payload.data.asset?.totalCount ?? 0,
+        assets: parseData(action.payload.data.assets),
+        assetsPageInfo: pageInfo(action.payload.data.assets),
+        assetsTotalCount: action.payload.data.assets?.totalCount ?? 0,
         errorAssets: formatGraphQLError(action.payload),
       };
     case ERROR(ACTION_TYPE.SEARCH_ASSETS):
@@ -99,7 +99,7 @@ function reducer(state = initialState, action) {
         ...state,
         fetchingAsset: false,
         fetchedAsset: true,
-        asset: parseData(action.payload.data.asset)?.[0] ?? null,
+        asset: parseData(action.payload.data.assets)?.[0] ?? null,
         errorAsset: formatGraphQLError(action.payload),
       };
     case ERROR(ACTION_TYPE.GET_ASSET):
@@ -133,9 +133,9 @@ function reducer(state = initialState, action) {
         ...state,
         fetchingAssetHistory: false,
         fetchedAssetHistory: true,
-        assetHistory: parseData(action.payload.data.assetAssignment),
-        assetHistoryPageInfo: pageInfo(action.payload.data.assetAssignment),
-        assetHistoryTotalCount: action.payload.data.assetAssignment?.totalCount ?? 0,
+        assetHistory: parseData(action.payload.data.assetAssignments),
+        assetHistoryPageInfo: pageInfo(action.payload.data.assetAssignments),
+        assetHistoryTotalCount: action.payload.data.assetAssignments?.totalCount ?? 0,
         errorAssetHistory: formatGraphQLError(action.payload),
       };
     case ERROR(ACTION_TYPE.GET_ASSET_HISTORY):
