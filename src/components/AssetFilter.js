@@ -88,16 +88,12 @@ function AssetFilter({
       </Grid>
       <Grid item xs={2} className={classes.item}>
         <DeviceTypePicker
-          withNull
-          nullLabel={formatMessage(intl, MODULE_NAME, 'any')}
           value={filterValue('deviceType')}
           onChange={onChangeEnumFilter('deviceType')}
         />
       </Grid>
       <Grid item xs={2} className={classes.item}>
         <AssetStatusPicker
-          withNull
-          nullLabel={formatMessage(intl, MODULE_NAME, 'any')}
           value={filterValue('status')}
           onChange={onChangeEnumFilter('status')}
         />

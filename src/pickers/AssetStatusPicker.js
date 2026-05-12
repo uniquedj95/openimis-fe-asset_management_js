@@ -1,51 +1,82 @@
-import React from 'react';
-import { ConstantBasedPicker } from '@openimis/fe-core';
+import React, { useMemo } from 'react';
+import { injectIntl } from 'react-intl';
+import { TextField } from '@material-ui/core';
+
+import { Autocomplete, formatMessage, useModulesManager } from '@openimis/fe-core';
 
 import { ASSET_STATUS_LIST, MODULE_NAME } from '../constants';
 import { getAllowedTransitions } from '../utils/statusFsm';
 
-function AssetStatusPicker(props) {
-  const {
-    required,
-    withNull = true,
-    readOnly,
-    onChange,
-    value,
-    nullLabel,
-    withLabel,
-    name = 'status',
-    reset,
-    // FSM-aware filtering: when provided, only allowed transition targets are selectable.
-    fromStatus,
-    // Explicit override (e.g. show only a subset). Wins over `fromStatus`.
-    restrictTo,
-  } = props;
+/**
+ * AssetStatusPicker.
+ *
+ * Supports the same FSM-aware filtering as before:
+ *   - `restrictTo`: explicit array of statuses to keep
+ *   - `fromStatus`: keep only statuses reachable by `getAllowedTransitions`
+ */
+function AssetStatusPicker({
+  intl,
+  onChange,
+  value,
+  readOnly,
+  required,
+  withLabel = true,
+  withPlaceholder = false,
+  label,
+  placeholder,
+  fromStatus,
+  restrictTo,
+}) {
+  const modulesManager = useModulesManager();
 
-  let filtered;
-  if (Array.isArray(restrictTo)) {
-    filtered = ASSET_STATUS_LIST.filter((s) => !restrictTo.includes(s));
-  } else if (fromStatus) {
-    const allowed = getAllowedTransitions(fromStatus);
-    filtered = ASSET_STATUS_LIST.filter((s) => !allowed.includes(s));
-  }
+  const options = useMemo(() => {
+    let visible = ASSET_STATUS_LIST;
+    if (Array.isArray(restrictTo)) {
+      visible = ASSET_STATUS_LIST.filter((s) => restrictTo.includes(s));
+    } else if (fromStatus) {
+      const allowed = getAllowedTransitions(fromStatus);
+      visible = ASSET_STATUS_LIST.filter((s) => allowed.includes(s));
+    }
+    return visible.map((s) => ({
+      id: s,
+      label: formatMessage(intl, MODULE_NAME, `asset.status.${s}`),
+    }));
+  }, [restrictTo, fromStatus, intl]);
+
+  const selected = useMemo(
+    () => options.find((o) => o.id === value),
+    [options, value],
+  );
+
+  const resolvedLabel = label ?? formatMessage(intl, MODULE_NAME, 'asset.status');
 
   return (
-    <ConstantBasedPicker
-      module={MODULE_NAME}
-      label="asset.status"
-      constants={ASSET_STATUS_LIST}
-      required={required}
-      withNull={withNull}
+    <Autocomplete
+      modulesManager={modulesManager}
+      options={options}
+      value={selected}
+      openOnFocus
+      getOptionLabel={(opt) => opt?.label ?? ''}
+      onChange={(opt) => onChange(opt?.id ?? null)}
+      onInputChange={() => {}}
       readOnly={readOnly}
-      onChange={onChange}
-      value={value}
-      nullLabel={nullLabel}
+      required={required}
       withLabel={withLabel}
-      name={name}
-      filtered={filtered}
-      reset={reset}
+      withPlaceholder={withPlaceholder}
+      label={resolvedLabel}
+      placeholder={placeholder}
+      renderInput={(inputProps) => (
+        <TextField
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...inputProps}
+          variant="standard"
+          required={required}
+          label={withLabel ? resolvedLabel : undefined}
+          placeholder={!readOnly && withPlaceholder ? placeholder : undefined}
+        />
+      )}
     />
   );
 }
 
-export default AssetStatusPicker;
+export default injectIntl(AssetStatusPicker);

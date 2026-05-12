@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 
 import {
   Searcher,
-  PublishedComponent,
   formatMessage,
   formatMessageWithValues,
   formatDateFromISO,
@@ -34,12 +33,10 @@ import AssignAssetDialog from './AssignAssetDialog';
 import UnassignAssetDialog from './UnassignAssetDialog';
 
 /**
- * AssetSearcher (Tasks #18 & #20 wiring)
+ * AssetSearcher
  *
  * Wraps Core `Searcher` and orchestrates the per-row action menu plus its
- * dialogs. Mirrors the openIMIS standard set by InvoiceSearcher /
- * BenefitPlanSearcher: `coreConfirm` + `journalize` live inside the
- * Searcher, not the Page.
+ * dialogs.
  *
  *   - Delete  -> coreConfirm + deleteAsset
  *   - Assign  -> AssignAssetDialog
@@ -185,15 +182,9 @@ function AssetSearcher({
     (asset) => asset.code,
     (asset) => asset.name,
     (asset) => asset.serialNumber,
-    (asset) => (
-      <PublishedComponent
-        pubRef="assetManagement.AssetStatusPicker"
-        readOnly
-        withLabel={false}
-        withNull={false}
-        value={asset.status}
-      />
-    ),
+    (asset) => (asset.status
+      ? formatMessage(intl, MODULE_NAME, `asset.status.${asset.status}`)
+      : ''),
     (asset) => asset.location?.name ?? '',
     (asset) => formatAssignedTo(asset),
     (asset) => formatDateFromISO(modulesManager, intl, asset.dateUpdated),
