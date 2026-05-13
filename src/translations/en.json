@@ -31,7 +31,15 @@
         "viewAll": "View all",
         "empty": "No assignment history yet.",
         "assignedBy": "by",
-        "returned": "returned"
+        "returned": "returned",
+        "columnHeaders": {
+          "assignedTo": "Assigned To",
+          "assignedBy": "Assigned By",
+          "assignedDate": "Assigned Date",
+          "returnedDate": "Returned Date",
+          "notes": "Notes",
+          "actions": "Actions"
+        }
       }
     },
     "assetHistoryPage": {
