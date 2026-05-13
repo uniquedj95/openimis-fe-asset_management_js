@@ -25,9 +25,10 @@ import {
 import { assignAsset } from '../actions';
 import { MODULE_NAME, RIGHT_ASSET_ASSIGN } from '../constants';
 import { defaultDialogStyles } from '../util/styles';
+import { assetLabel, assetUuid } from '../utils/asset';
 
 /**
- * AssignAssetDialog (Task #27)
+ * AssignAssetDialog
  *
  * Modal that captures the user to assign an asset to, optional notes, and an
  * optional "force reassign" flag (visible only when the asset already has an
@@ -62,21 +63,21 @@ function AssignAssetDialog({
       setNotes('');
       setForce(false);
     }
-  }, [asset?.uuid]);
+  }, [asset?.id]);
 
   const handleClose = () => {
     onClose?.();
   };
 
   const handleSubmit = () => {
-    if (!user?.uuid) return;
+    if (!user?.uuid && !user?.id) return;
     assignAsset(
-      asset.uuid,
-      user.uuid,
+      assetUuid(asset),
+      user.uuid || user.id,
       notes,
       force,
       formatMessageWithValues(intl, MODULE_NAME, 'asset.assign.mutationLabel', {
-        code: asset.code,
+        serialNumber: assetLabel(asset),
       }),
     );
     handleClose();
@@ -88,7 +89,7 @@ function AssignAssetDialog({
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle>
         {asset && formatMessageWithValues(intl, MODULE_NAME, titleKey, {
-          code: asset.code,
+          serialNumber: assetLabel(asset),
           name: asset.name,
         })}
       </DialogTitle>
@@ -141,7 +142,7 @@ function AssignAssetDialog({
           onClick={handleSubmit}
           color="primary"
           variant="contained"
-          disabled={!user?.uuid || (isReassign && !force)}
+          disabled={!user?.uuid && !user?.id}
         >
           {formatMessage(intl, MODULE_NAME, 'assignDialog.submit')}
         </Button>

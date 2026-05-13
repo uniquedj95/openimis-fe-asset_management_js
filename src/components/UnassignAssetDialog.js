@@ -22,9 +22,10 @@ import {
 import { unassignAsset } from '../actions';
 import { MODULE_NAME } from '../constants';
 import { defaultDialogStyles } from '../util/styles';
+import { assetLabel, assetUuid } from '../utils/asset';
 
 /**
- * UnassignAssetDialog (Task #28)
+ * UnassignAssetDialog
  *
  * Simple confirmation modal with an optional notes field. On submit it
  * dispatches `unassignAsset(assetUuid, notes)`.
@@ -37,16 +38,16 @@ function UnassignAssetDialog({
 
   useEffect(() => {
     if (open) setNotes('');
-  }, [asset?.uuid]);
+  }, [asset?.id]);
 
   const handleClose = () => onClose?.();
 
   const handleSubmit = () => {
     unassignAsset(
-      asset.uuid,
+      assetUuid(asset),
       notes,
       formatMessageWithValues(intl, MODULE_NAME, 'asset.unassign.mutationLabel', {
-        code: asset.code,
+        serialNumber: assetLabel(asset),
       }),
     );
     handleClose();
@@ -56,7 +57,7 @@ function UnassignAssetDialog({
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle>
         {asset && formatMessageWithValues(intl, MODULE_NAME, 'unassignDialog.title', {
-          code: asset.code,
+          serialNumber: assetLabel(asset),
           name: asset.name,
         })}
       </DialogTitle>
