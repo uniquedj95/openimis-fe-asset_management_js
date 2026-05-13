@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -13,7 +13,7 @@ import { makeStyles } from '@material-ui/styles';
 
 import {
   Form, ProgressOrError,
-  FormattedMessage, formatMessage, formatMessageWithValues,
+  FormattedMessage, formatMessage,
   coreConfirm, clearConfirm, journalize,
 } from '@openimis/fe-core';
 
@@ -28,7 +28,8 @@ import {
 } from '../constants';
 import { canTransition, isTerminal } from '../utils/statusFsm';
 import { deleteAsset, transitionAssetStatus } from '../actions';
-import { assetUuid, assetLabel } from '../utils/asset';
+import { assetUuid } from '../utils/asset';
+import useAssetActions from '../hooks/useAssetActions';
 import AssetMasterPanel from './AssetMasterPanel';
 import AssetAssignmentPanel from './AssetAssignmentPanel';
 import AssignAssetDialog from './AssignAssetDialog';
@@ -55,10 +56,8 @@ function AssetForm({
   const isEdit = !!(asset?.id || asset?.uuid);
   const titleKey = isEdit ? 'assetPage.title.edit' : 'assetPage.title.create';
 
-  const [pending, setPending] = useState(null);
   const [openAssign, setOpenAssign] = useState(false);
   const [openUnassign, setOpenUnassign] = useState(false);
-  const prevSubmittingRef = useRef();
 
   const currentStatus = edited?.status?.code;
   const terminal = isTerminal(currentStatus);
@@ -74,68 +73,35 @@ function AssetForm({
   const canAssign = isEdit && !terminal && rights?.includes(RIGHT_ASSET_ASSIGN);
   const canUnassign = isEdit && !terminal && !!assignee && rights?.includes(RIGHT_ASSET_UNASSIGN);
 
-  const openConfirm = () => {
-    if (pending?.kind === 'delete') {
-      coreConfirm(
-        formatMessageWithValues(intl, MODULE_NAME, 'asset.delete.confirm.title', {
-          serialNumber: assetLabel(edited),
-          name: edited?.name ?? '',
-        }),
-        formatMessage(intl, MODULE_NAME, 'asset.delete.confirm.message'),
+  const {
+    openDeleteConfirm,
+    openTransitionConfirm,
+  } = useAssetActions({
+    intl,
+    coreConfirm,
+    clearConfirm,
+    journalize,
+    onDeleteAsset: (asset) => {
+      deleteAsset(
+        asset,
+        formatMessage(intl, MODULE_NAME, 'asset.delete.mutationLabel'),
       );
-    } else if (pending?.kind === 'transition') {
-      const statusLabel = formatMessage(intl, MODULE_NAME, `asset.status.${pending.target}`);
-      coreConfirm(
-        formatMessageWithValues(intl, MODULE_NAME, 'asset.transition.confirm.title', {
+    },
+    onTransition: (asset, target) => {
+      const statusLabel = formatMessage(intl, MODULE_NAME, `asset.status.${target}`);
+      transitionAssetStatus(
+        assetUuid(asset),
+        target,
+        null,
+        formatMessage(intl, MODULE_NAME, 'asset.transition.mutationLabel', {
           status: statusLabel,
         }),
-        formatMessageWithValues(intl, MODULE_NAME, 'asset.transition.confirm.message', {
-          serialNumber: assetLabel(edited),
-          name: edited?.name ?? '',
-          status: statusLabel,
-        }),
       );
-    }
-  };
-
-  useEffect(() => {
-    if (pending) openConfirm();
-  }, [pending]);
-
-  useEffect(() => {
-    if (!pending) return undefined;
-    if (confirmed) {
-      if (pending.kind === 'delete') {
-        deleteAsset(
-          edited,
-          formatMessageWithValues(intl, MODULE_NAME, 'asset.delete.mutationLabel', {
-            serialNumber: assetLabel(edited),
-          }),
-        );
-      } else if (pending.kind === 'transition') {
-        const statusLabel = formatMessage(intl, MODULE_NAME, `asset.status.${pending.target}`);
-        transitionAssetStatus(
-          assetUuid(edited),
-          pending.target,
-          null,
-          formatMessageWithValues(intl, MODULE_NAME, 'asset.transition.mutationLabel', {
-            serialNumber: assetLabel(edited),
-            status: statusLabel,
-          }),
-        );
-      }
-    }
-    if (confirmed !== null) setPending(null);
-    return () => confirmed && clearConfirm(false);
-  }, [confirmed]);
-
-  useEffect(() => {
-    if (prevSubmittingRef.current && !submittingMutation) {
-      journalize(mutation);
-    }
-  }, [submittingMutation]);
-
-  useEffect(() => { prevSubmittingRef.current = submittingMutation; });
+    },
+    confirmed,
+    submittingMutation,
+    mutation,
+  });
 
   const formActions = [
     { doIt: onReset, icon: <ReplayIcon />, onlyIfDirty: !readOnly },
@@ -143,7 +109,7 @@ function AssetForm({
 
   if (canMaintenance) {
     formActions.push({
-      doIt: () => setPending({ kind: 'transition', target: ASSET_STATUS.REPAIR }),
+      doIt: () => openTransitionConfirm(edited, ASSET_STATUS.REPAIR),
       icon: <BuildIcon />,
       tooltip: formatMessage(intl, MODULE_NAME, 'transition.tooltip.sendToMaintenance'),
       label: <FormattedMessage module={MODULE_NAME} id="transition.sendToMaintenance" />,
@@ -153,7 +119,7 @@ function AssetForm({
 
   if (canRetire) {
     formActions.push({
-      doIt: () => setPending({ kind: 'transition', target: ASSET_STATUS.RETIRED }),
+      doIt: () => openTransitionConfirm(edited, ASSET_STATUS.RETIRED),
       icon: <ArchiveIcon />,
       tooltip: formatMessage(intl, MODULE_NAME, 'transition.tooltip.retire'),
       label: <FormattedMessage module={MODULE_NAME} id="transition.retire" />,
@@ -183,7 +149,7 @@ function AssetForm({
 
   if (canDelete) {
     formActions.push({
-      doIt: () => setPending({ kind: 'delete' }),
+      doIt: () => openDeleteConfirm(edited),
       icon: <DeleteIcon />,
       tooltip: formatMessage(intl, MODULE_NAME, 'tooltip.delete'),
       label: <FormattedMessage module={MODULE_NAME} id="button.delete" />,

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -26,6 +26,7 @@ import {
   deleteAsset,
   transitionAssetStatus,
 } from '../actions';
+import useAssetActions from '../hooks/useAssetActions';
 import AssetIcon from '../displays/AssetIcon';
 import AssetFilter from './AssetFilter';
 import buildAssetRowActions from './AssetRowActions';
@@ -67,80 +68,40 @@ function AssetSearcher({
   defaultFilters: callerDefaultFilters,
 }) {
   // ----- Local state for action orchestration -----
-  const [assetToDelete, setAssetToDelete] = useState(null);
   const [assetToAssign, setAssetToAssign] = useState(null);
   const [assetToUnassign, setAssetToUnassign] = useState(null);
-  const [pendingTransition, setPendingTransition] = useState(null); // { asset, target }
   const [deletedAssetUuids, setDeletedAssetUuids] = useState([]);
-  const prevSubmittingMutationRef = useRef();
 
-  // ----- Delete: coreConfirm -> deleteAsset -----
-  const openDeleteConfirm = () => coreConfirm(
-    formatMessageWithValues(intl, MODULE_NAME, 'asset.delete.confirm.title', {
-      serialNumber: assetToDelete.serialNumber,
-      name: assetToDelete.name,
-    }),
-    formatMessage(intl, MODULE_NAME, 'asset.delete.confirm.message'),
-  );
-
-  useEffect(() => {
-    if (assetToDelete) openDeleteConfirm();
-  }, [assetToDelete]);
-
-  // ----- Transition: coreConfirm -> transitionAssetStatus -----
-  const openTransitionConfirm = () => coreConfirm(
-    formatMessageWithValues(intl, MODULE_NAME, 'asset.transition.confirm.title', {
-      status: formatMessage(intl, MODULE_NAME, `asset.status.${pendingTransition.target}`),
-    }),
-    formatMessageWithValues(intl, MODULE_NAME, 'asset.transition.confirm.message', {
-      serialNumber: pendingTransition.asset.serialNumber,
-      name: pendingTransition.asset.name,
-      status: formatMessage(intl, MODULE_NAME, `asset.status.${pendingTransition.target}`),
-    }),
-  );
-
-  useEffect(() => {
-    if (pendingTransition) openTransitionConfirm();
-  }, [pendingTransition]);
-
-  // ----- Single confirmed-effect handles both delete + transition -----
-  useEffect(() => {
-    if (assetToDelete && confirmed) {
+  // ----- Shared hook for delete + transition confirmations -----
+  const {
+    openDeleteConfirm,
+    openTransitionConfirm,
+  } = useAssetActions({
+    intl,
+    coreConfirm,
+    clearConfirm,
+    journalize,
+    onDeleteAsset: (asset) => {
       deleteAsset(
-        assetToDelete,
-        formatMessageWithValues(intl, MODULE_NAME, 'asset.delete.mutationLabel', {
-          serialNumber: assetToDelete.serialNumber,
-        }),
+        asset,
+        formatMessage(intl, MODULE_NAME, 'asset.delete.mutationLabel'),
       );
-      setDeletedAssetUuids([...deletedAssetUuids, assetToDelete.id]);
-    }
-    if (assetToDelete && confirmed !== null) setAssetToDelete(null);
-
-    if (pendingTransition && confirmed) {
+      setDeletedAssetUuids([...deletedAssetUuids, asset.id]);
+    },
+    onTransition: (asset, target) => {
+      const statusLabel = formatMessage(intl, MODULE_NAME, `asset.status.${target}`);
       transitionAssetStatus(
-        pendingTransition.asset.id,
-        pendingTransition.target,
+        asset.id,
+        target,
         null,
-        formatMessageWithValues(intl, MODULE_NAME, 'asset.transition.mutationLabel', {
-          serialNumber: pendingTransition.asset.serialNumber,
-          status: formatMessage(intl, MODULE_NAME, `asset.status.${pendingTransition.target}`),
+        formatMessage(intl, MODULE_NAME, 'asset.transition.mutationLabel', {
+          status: statusLabel,
         }),
       );
-    }
-    if (pendingTransition && confirmed !== null) setPendingTransition(null);
-
-    return () => confirmed && clearConfirm(false);
-  }, [confirmed]);
-
-  // ----- Journalize after a mutation settles -----
-  useEffect(() => {
-    if (prevSubmittingMutationRef.current && !submittingMutation) {
-      journalize(mutation);
-    }
-  }, [submittingMutation]);
-
-  useEffect(() => {
-    prevSubmittingMutationRef.current = submittingMutation;
+    },
+    confirmed,
+    submittingMutation,
+    mutation,
   });
 
   // ----- Searcher plumbing -----
@@ -163,8 +124,8 @@ function AssetSearcher({
     return [u.lastName, u.otherNames].filter(Boolean).join(' ');
   };
 
-  // Build row action formatters once per render; callbacks just set local
-  // state so the Searcher's shallow comparison stays stable enough.
+  // Build row action formatters once per render; callbacks call the
+  // shared hook methods to open confirmations.
   const rowActionFormatters = buildAssetRowActions({
     intl,
     modulesManager,
@@ -172,8 +133,8 @@ function AssetSearcher({
     rights,
     onAssign: (asset) => setAssetToAssign(asset),
     onUnassign: (asset) => setAssetToUnassign(asset),
-    onTransition: (asset, target) => setPendingTransition({ asset, target }),
-    onDelete: (asset) => setAssetToDelete(asset),
+    onTransition: (asset, target) => openTransitionConfirm(asset, target),
+    onDelete: (asset) => openDeleteConfirm(asset),
   });
 
   const formatStatus = (asset) => {
