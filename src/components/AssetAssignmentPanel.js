@@ -45,7 +45,6 @@ function AssetAssignmentPanel({
 
   const defaultFilters = () => ({
     asset_Id: { value: uuid, filter: `asset_Id: "${uuid}"` },
-    orderBy: { value: '-assignedDate', filter: 'orderBy: ["-assignedDate"]' },
   });
 
   const headers = () => [
