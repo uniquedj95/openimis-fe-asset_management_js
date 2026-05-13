@@ -20,6 +20,7 @@ import {
   PublishedComponent,
   TextInput,
   useModulesManager,
+  journalize,
 } from '@openimis/fe-core';
 
 import { assignAsset } from '../actions';
@@ -46,6 +47,9 @@ function AssignAssetDialog({
   asset,
   rights,
   assignAsset,
+  journalize: journalizeAction,
+  submittingMutation,
+  mutation,
   onClose,
 }) {
   const modulesManager = useModulesManager();
@@ -56,6 +60,7 @@ function AssignAssetDialog({
   const [user, setUser] = useState(null);
   const [notes, setNotes] = useState('');
   const [force, setForce] = useState(false);
+  const prevSubmittingRef = React.useRef();
 
   useEffect(() => {
     if (open) {
@@ -64,6 +69,15 @@ function AssignAssetDialog({
       setForce(false);
     }
   }, [asset?.id]);
+
+  // Journalize after mutation completes
+  useEffect(() => {
+    if (prevSubmittingRef.current && !submittingMutation && mutation) {
+      journalizeAction(mutation);
+      onClose?.();
+    }
+    prevSubmittingRef.current = submittingMutation;
+  }, [submittingMutation, mutation, journalizeAction, onClose]);
 
   const handleClose = () => {
     onClose?.();
@@ -80,7 +94,6 @@ function AssignAssetDialog({
         serialNumber: assetLabel(asset),
       }),
     );
-    handleClose();
   };
 
   const titleKey = isReassign ? 'assignDialog.reassignTitle' : 'assignDialog.title';
@@ -153,9 +166,11 @@ function AssignAssetDialog({
 
 const mapStateToProps = (state) => ({
   rights: state.core?.user?.i_user?.rights ?? [],
+  submittingMutation: state.assetManagement.submittingMutation,
+  mutation: state.assetManagement.mutation,
 });
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({ assignAsset }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ assignAsset, journalize }, dispatch);
 
 export default injectIntl(
   withTheme(
