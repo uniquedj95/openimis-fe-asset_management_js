@@ -105,12 +105,12 @@ export const ASSET_PROJECTION = [
 
 export const ASSIGNMENT_PROJECTION = [
   'id',
-  'uuid',
-  'action',
   'notes',
+  'assignedDate',
+  'returnedDate',
+  'isActive',
   'dateCreated',
-  'asset { id uuid code name }',
-  'fromUser { id uuid lastName otherNames }',
-  'toUser { id uuid lastName otherNames }',
-  'performedBy { id uuid lastName otherNames }',
+  'asset { id name serialNumber }',
+  'assignedTo { id username lastName otherNames }',
+  'assignedBy { id username lastName otherNames }',
 ];
