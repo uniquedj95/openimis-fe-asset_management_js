@@ -14,6 +14,7 @@ import AssignmentActionPicker from './pickers/AssignmentActionPicker';
 import AssetPicker from './pickers/AssetPicker';
 import AssetIcon from './displays/AssetIcon';
 import AssetsPage from './pages/AssetsPage';
+import AssetPage from './pages/AssetPage';
 import {
   MODULE_NAME,
   ROUTE_ASSETS,
@@ -37,6 +38,7 @@ const DEFAULT_CONFIG = {
   ],
   'core.Router': [
     { path: ROUTE_ASSETS, component: AssetsPage },
+    { path: `${ROUTE_ASSET}/:asset_uuid?`, component: AssetPage },
   ],
   refs: [
     { key: 'assetManagement.route.assets', ref: ROUTE_ASSETS },
