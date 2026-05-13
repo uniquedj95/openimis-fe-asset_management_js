@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -71,6 +71,16 @@ function AssetSearcher({
   const [assetToAssign, setAssetToAssign] = useState(null);
   const [assetToUnassign, setAssetToUnassign] = useState(null);
   const [deletedAssetUuids, setDeletedAssetUuids] = useState([]);
+  const prevSubmittingRef = useRef();
+  const lastFetchParamsRef = useRef();
+
+  // Re-fetch the list after any mutation completes so row actions reflect new status
+  useEffect(() => {
+    if (prevSubmittingRef.current && !submittingMutation && lastFetchParamsRef.current) {
+      fetchAssets(lastFetchParamsRef.current);
+    }
+    prevSubmittingRef.current = submittingMutation;
+  }, [submittingMutation]);
 
   // ----- Shared hook for delete + transition confirmations -----
   const {
@@ -105,7 +115,10 @@ function AssetSearcher({
   });
 
   // ----- Searcher plumbing -----
-  const fetch = (params) => fetchAssets(params);
+  const fetch = (params) => {
+    lastFetchParamsRef.current = params;
+    fetchAssets(params);
+  };
 
   const headers = () => [
     'asset.deviceType',
