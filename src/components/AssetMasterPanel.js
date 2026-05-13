@@ -79,13 +79,49 @@ function AssetMasterPanel({
           />
         </Grid>
         <Grid item xs={4} className={classes.item}>
+          <TextInput
+            module={MODULE_NAME}
+            label="asset.imei"
+            readOnly={readOnly}
+            value={edited?.imei ?? ''}
+            onChange={onChange('imei')}
+          />
+        </Grid>
+        <Grid item xs={4} className={classes.item}>
+          <TextInput
+            module={MODULE_NAME}
+            label="asset.manufacturer"
+            readOnly={readOnly}
+            value={edited?.manufacturer ?? ''}
+            onChange={onChange('manufacturer')}
+          />
+        </Grid>
+        <Grid item xs={4} className={classes.item}>
+          <TextInput
+            module={MODULE_NAME}
+            label="asset.model"
+            readOnly={readOnly}
+            value={edited?.model ?? ''}
+            onChange={onChange('model')}
+          />
+        </Grid>
+        <Grid item xs={4} className={classes.item}>
+          <TextInput
+            module={MODULE_NAME}
+            label="asset.osVersion"
+            readOnly={readOnly}
+            value={edited?.osVersion ?? ''}
+            onChange={onChange('osVersion')}
+          />
+        </Grid>
+        <Grid item xs={4} className={classes.item}>
           <AssetStatusPicker
             readOnly
             withNull={false}
             value={edited?.status?.code ?? null}
           />
         </Grid>
-        <Grid item xs={8} className={classes.item}>
+        <Grid item xs={4} className={classes.item}>
           <PublishedComponent
             pubRef="location.LocationPicker"
             label={formatMessage(intl, MODULE_NAME, 'asset.location')}

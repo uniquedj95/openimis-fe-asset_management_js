@@ -79,6 +79,11 @@ function buildAssetMutationInput(asset) {
     `name: "${formatGQLString(asset.name ?? '')}"`,
     `serialNumber: "${formatGQLString(asset.serialNumber ?? '')}"`,
   ];
+  if (asset.imei) lines.push(`imei: "${formatGQLString(asset.imei)}"`);
+  if (asset.manufacturer) lines.push(`manufacturer: "${formatGQLString(asset.manufacturer)}"`);
+  if (asset.model) lines.push(`model: "${formatGQLString(asset.model)}"`);
+  if (asset.osVersion) lines.push(`osVersion: "${formatGQLString(asset.osVersion)}"`);
+
   const deviceTypeId = decodeOrNull(asset.deviceType?.id);
   if (deviceTypeId) lines.push(`deviceTypeId: "${deviceTypeId}"`);
   const statusId = decodeOrNull(asset.status?.id);

@@ -68,6 +68,30 @@ function AssetFilter({
         />
       </Grid>
       <Grid item xs={2} className={classes.item}>
+        <TextInput
+          module={MODULE_NAME}
+          label="asset.imei"
+          value={filterTextFieldValue('imei')}
+          onChange={onChangeStringFilter('imei', CONTAINS_LOOKUP)}
+        />
+      </Grid>
+      <Grid item xs={2} className={classes.item}>
+        <TextInput
+          module={MODULE_NAME}
+          label="asset.manufacturer"
+          value={filterTextFieldValue('manufacturer')}
+          onChange={onChangeStringFilter('manufacturer', CONTAINS_LOOKUP)}
+        />
+      </Grid>
+      <Grid item xs={2} className={classes.item}>
+        <TextInput
+          module={MODULE_NAME}
+          label="asset.model"
+          value={filterTextFieldValue('model')}
+          onChange={onChangeStringFilter('model', CONTAINS_LOOKUP)}
+        />
+      </Grid>
+      <Grid item xs={2} className={classes.item}>
         <DeviceTypePicker
           value={filterValue('deviceType_Code')}
           onChange={onChangeStringFilter('deviceType_Code')}
