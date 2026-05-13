@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
-  Grid, Typography, Button, Table, TableBody, TableCell, TableHead, TableRow,
+  Grid, Typography, Table, TableBody, TableCell, TableHead, TableRow,
 } from '@material-ui/core';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withTheme, withStyles } from '@material-ui/core/styles';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import PersonAddDisabledIcon from '@material-ui/icons/PersonAddDisabled';
 
 import {
   FormattedMessage,
@@ -19,14 +17,9 @@ import {
 
 import {
   MODULE_NAME,
-  RIGHT_ASSET_ASSIGN,
-  RIGHT_ASSET_UNASSIGN,
 } from '../constants';
-import { isTerminal } from '../utils/statusFsm';
 import { fetchAssignmentHistory } from '../actions';
 import { assetUuid } from '../utils/asset';
-import AssignAssetDialog from './AssignAssetDialog';
-import UnassignAssetDialog from './UnassignAssetDialog';
 
 const styles = (theme) => ({
   item: theme.paper.item,
@@ -37,7 +30,6 @@ const styles = (theme) => ({
   },
   tableHeaderRow: {
     backgroundColor: '#f5f5f5',
-    fontWeight: 'bold',
   },
   activeAssignmentRow: {
     backgroundColor: '#fafafa',
@@ -65,19 +57,12 @@ function formatUser(u) {
  * and the compact assignment-history list into a single panel.
  */
 function AssetAssignmentPanel({
-  intl, classes, modulesManager, edited, rights,
+  intl, classes, modulesManager, edited,
   fetchingAssetHistory, fetchedAssetHistory, errorAssetHistory,
   assetHistory, assetHistoryTotalCount, mutationKey,
   fetchAssignmentHistory,
 }) {
-  const [openAssign, setOpenAssign] = useState(false);
-  const [openUnassign, setOpenUnassign] = useState(false);
-
   const uuid = assetUuid(edited);
-  const terminal = isTerminal(edited?.status?.code);
-  const assignee = edited?.assignedTo;
-  const canAssign = !terminal && rights?.includes(RIGHT_ASSET_ASSIGN);
-  const canUnassign = !terminal && !!assignee && rights?.includes(RIGHT_ASSET_UNASSIGN);
 
   useEffect(() => {
     if (uuid) fetchAssignmentHistory(uuid);
@@ -88,22 +73,6 @@ function AssetAssignmentPanel({
   return (
     <div className={classes.paper}>
       <Grid container direction="column" spacing={2}>
-        {/* Show assign button if not assigned and not terminal */}
-        {!assignee && !terminal && canAssign && (
-          <Grid item>
-            <Button
-              color="primary"
-              variant="contained"
-              size="medium"
-              startIcon={<PersonAddIcon />}
-              onClick={() => setOpenAssign(true)}
-              fullWidth
-            >
-              <FormattedMessage module={MODULE_NAME} id="transition.assign" />
-            </Button>
-          </Grid>
-        )}
-
         {/* History Table */}
         {uuid && (
           <>
@@ -163,12 +132,6 @@ function AssetAssignmentPanel({
                           id="assetPage.history.columnHeaders.notes"
                         />
                       </TableCell>
-                      <TableCell variant="head" align="right">
-                        <FormattedMessage
-                          module={MODULE_NAME}
-                          id="assetPage.history.columnHeaders.actions"
-                        />
-                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -200,43 +163,7 @@ function AssetAssignmentPanel({
                           </TableCell>
                           <TableCell>{row.notes || '—'}</TableCell>
                           <TableCell align="right">
-                            {isCurrentAssignment && (
-                              <Grid container spacing={1} justifyContent="flex-end">
-                                {canAssign && (
-                                  <Grid item>
-                                    <Button
-                                      color="primary"
-                                      variant="outlined"
-                                      size="small"
-                                      startIcon={<PersonAddIcon />}
-                                      onClick={() => setOpenAssign(true)}
-                                      className={classes.buttonText}
-                                    >
-                                      <FormattedMessage
-                                        module={MODULE_NAME}
-                                        id="transition.reassign"
-                                      />
-                                    </Button>
-                                  </Grid>
-                                )}
-                                {canUnassign && (
-                                  <Grid item>
-                                    <Button
-                                      variant="outlined"
-                                      size="small"
-                                      startIcon={<PersonAddDisabledIcon />}
-                                      onClick={() => setOpenUnassign(true)}
-                                      className={`${classes.buttonText} ${classes.unassignButton}`}
-                                    >
-                                      <FormattedMessage
-                                        module={MODULE_NAME}
-                                        id="transition.unassign"
-                                      />
-                                    </Button>
-                                  </Grid>
-                                )}
-                              </Grid>
-                            )}
+                            {/* Row actions removed; Assign/Unassign now use form actions */}
                           </TableCell>
                         </TableRow>
                       );
@@ -249,14 +176,6 @@ function AssetAssignmentPanel({
         )}
       </Grid>
 
-      <AssignAssetDialog
-        asset={openAssign ? edited : null}
-        onClose={() => setOpenAssign(false)}
-      />
-      <UnassignAssetDialog
-        asset={openUnassign ? edited : null}
-        onClose={() => setOpenUnassign(false)}
-      />
     </div>
   );
 }
