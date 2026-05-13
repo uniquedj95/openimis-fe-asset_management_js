@@ -37,6 +37,7 @@ const styles = (theme) => ({
   },
   tableHeaderRow: {
     backgroundColor: '#f5f5f5',
+    fontWeight: 'bold',
   },
   activeAssignmentRow: {
     backgroundColor: '#fafafa',
@@ -132,12 +133,42 @@ function AssetAssignmentPanel({
                 <Table size="small">
                   <TableHead>
                     <TableRow className={classes.tableHeaderRow}>
-                      <TableCell><strong>Assigned To</strong></TableCell>
-                      <TableCell><strong>Assigned By</strong></TableCell>
-                      <TableCell><strong>Assigned Date</strong></TableCell>
-                      <TableCell><strong>Returned Date</strong></TableCell>
-                      <TableCell><strong>Notes</strong></TableCell>
-                      <TableCell align="right"><strong>Actions</strong></TableCell>
+                      <TableCell variant="head">
+                        <FormattedMessage
+                          module={MODULE_NAME}
+                          id="assetPage.history.columnHeaders.assignedTo"
+                        />
+                      </TableCell>
+                      <TableCell variant="head">
+                        <FormattedMessage
+                          module={MODULE_NAME}
+                          id="assetPage.history.columnHeaders.assignedBy"
+                        />
+                      </TableCell>
+                      <TableCell variant="head">
+                        <FormattedMessage
+                          module={MODULE_NAME}
+                          id="assetPage.history.columnHeaders.assignedDate"
+                        />
+                      </TableCell>
+                      <TableCell variant="head">
+                        <FormattedMessage
+                          module={MODULE_NAME}
+                          id="assetPage.history.columnHeaders.returnedDate"
+                        />
+                      </TableCell>
+                      <TableCell variant="head">
+                        <FormattedMessage
+                          module={MODULE_NAME}
+                          id="assetPage.history.columnHeaders.notes"
+                        />
+                      </TableCell>
+                      <TableCell variant="head" align="right">
+                        <FormattedMessage
+                          module={MODULE_NAME}
+                          id="assetPage.history.columnHeaders.actions"
+                        />
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
