@@ -229,6 +229,7 @@ export function transitionAssetStatus(assetUuid, targetStatus, notes, clientMuta
     [REQUEST(ACTION_TYPE.MUTATION), SUCCESS(ACTION_TYPE.TRANSITION_ASSET), ERROR(ACTION_TYPE.MUTATION)],
     {
       actionType: ACTION_TYPE.TRANSITION_ASSET,
+      mutationName,
       clientMutationId: mutation.clientMutationId,
       clientMutationLabel,
       requestedDateTime,

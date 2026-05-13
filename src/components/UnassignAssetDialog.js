@@ -17,6 +17,7 @@ import {
   formatMessage,
   formatMessageWithValues,
   TextInput,
+  journalize,
 } from '@openimis/fe-core';
 
 import { unassignAsset } from '../actions';
@@ -31,14 +32,31 @@ import { assetLabel, assetUuid } from '../utils/asset';
  * dispatches `unassignAsset(assetUuid, notes)`.
  */
 function UnassignAssetDialog({
-  intl, classes, asset, unassignAsset, onClose,
+  intl,
+  classes,
+  asset,
+  unassignAsset,
+  journalize: journalizeAction,
+  submittingMutation,
+  mutation,
+  onClose,
 }) {
   const open = !!asset;
   const [notes, setNotes] = useState('');
+  const prevSubmittingRef = React.useRef();
 
   useEffect(() => {
     if (open) setNotes('');
   }, [asset?.id]);
+
+  // Journalize after mutation completes
+  useEffect(() => {
+    if (prevSubmittingRef.current && !submittingMutation && mutation) {
+      journalizeAction(mutation);
+      onClose?.();
+    }
+    prevSubmittingRef.current = submittingMutation;
+  }, [submittingMutation, mutation, journalizeAction, onClose]);
 
   const handleClose = () => onClose?.();
 
@@ -50,7 +68,6 @@ function UnassignAssetDialog({
         serialNumber: assetLabel(asset),
       }),
     );
-    handleClose();
   };
 
   return (
@@ -94,12 +111,17 @@ function UnassignAssetDialog({
   );
 }
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({ unassignAsset }, dispatch);
+const mapStateToProps = (state) => ({
+  submittingMutation: state.assetManagement.submittingMutation,
+  mutation: state.assetManagement.mutation,
+});
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({ unassignAsset, journalize }, dispatch);
 
 export default injectIntl(
   withTheme(
     withStyles(defaultDialogStyles)(
-      connect(null, mapDispatchToProps)(UnassignAssetDialog),
+      connect(mapStateToProps, mapDispatchToProps)(UnassignAssetDialog),
     ),
   ),
 );

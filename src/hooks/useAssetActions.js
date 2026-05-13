@@ -73,30 +73,27 @@ export default function useAssetActions({
     );
   };
 
+  // Handle confirmed actions: dispatch the mutation and clear pending state
   useEffect(() => {
-    if (!confirmed) return undefined;
-
-    if (pendingDelete && onDeleteAsset) {
-      onDeleteAsset(pendingDelete);
-    } else if (pendingTransition && onTransition) {
-      onTransition(pendingTransition.asset, pendingTransition.target);
-    }
-
-    if (confirmed !== null) {
+    if (confirmed) {
+      if (pendingDelete && onDeleteAsset) {
+        onDeleteAsset(pendingDelete);
+      } else if (pendingTransition && onTransition) {
+        onTransition(pendingTransition.asset, pendingTransition.target);
+      }
       setPendingDelete(null);
       setPendingTransition(null);
+      clearConfirmAction(false);
     }
+  }, [confirmed, pendingDelete, pendingTransition, onDeleteAsset, onTransition, clearConfirmAction]);
 
-    return () => confirmed && clearConfirmAction(false);
-  }, [confirmed]);
-
+  // Journalize after mutation completes
   useEffect(() => {
-    if (prevSubmittingRef.current && !submittingMutation) {
+    if (prevSubmittingRef.current && !submittingMutation && mutation) {
       journalizeAction(mutation);
     }
-  }, [submittingMutation]);
-
-  useEffect(() => { prevSubmittingRef.current = submittingMutation; });
+    prevSubmittingRef.current = submittingMutation;
+  }, [submittingMutation, mutation, journalizeAction]);
 
   return {
     getAssetLabel,

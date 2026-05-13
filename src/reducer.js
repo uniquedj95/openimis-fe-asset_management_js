@@ -152,12 +152,17 @@ function reducer(state = initialState, action) {
       return dispatchMutationErr(state, action);
 
     case SUCCESS(ACTION_TYPE.CREATE_ASSET):
+      return dispatchMutationResp(state, 'createAsset', action);
     case SUCCESS(ACTION_TYPE.UPDATE_ASSET):
+      return dispatchMutationResp(state, 'updateAsset', action);
     case SUCCESS(ACTION_TYPE.DELETE_ASSET):
+      return dispatchMutationResp(state, 'deleteAsset', action);
     case SUCCESS(ACTION_TYPE.ASSIGN_ASSET):
+      return dispatchMutationResp(state, 'assignAsset', action);
     case SUCCESS(ACTION_TYPE.UNASSIGN_ASSET):
+      return dispatchMutationResp(state, 'unassignAsset', action);
     case SUCCESS(ACTION_TYPE.TRANSITION_ASSET):
-      return dispatchMutationResp(state, action.meta.actionType, action);
+      return dispatchMutationResp(state, action.meta.mutationName, action);
 
     default:
       return state;
