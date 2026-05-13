@@ -52,12 +52,10 @@ export function clearAsset() {
 /**
  * Assignment-history entries for an asset, newest first.
  */
-export function fetchAssignmentHistory(assetUuid) {
-  const raw = asUuid(assetUuid);
-  if (!raw) return { type: CLEAR(ACTION_TYPE.GET_ASSET_HISTORY) };
+export function fetchAssignmentHistory(params) {
   const payload = formatPageQueryWithCount(
     'assetAssignments',
-    [`asset_Id: "${raw}"`, 'orderBy: ["-assignedDate"]'],
+    params,
     ASSIGNMENT_PROJECTION,
   );
   return graphql(payload, ACTION_TYPE.GET_ASSET_HISTORY);

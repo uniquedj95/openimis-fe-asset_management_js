@@ -27,7 +27,7 @@
         "unassigned": "— Not assigned —"
       },
       "history": {
-        "title": "Recent assignments",
+        "title": "Recent assignments ({count})",
         "viewAll": "View all",
         "empty": "No assignment history yet.",
         "assignedBy": "by",
