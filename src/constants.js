@@ -105,7 +105,7 @@ export const ASSET_PROJECTION = [
   'deviceType { id code name }',
   'status { id code name canAssign }',
   'location { id uuid code name type }',
-  'assignedTo { id uuid username lastName otherNames }',
+  'assignedTo { id username lastName otherNames }',
 ];
 
 export const ASSIGNMENT_PROJECTION = [
@@ -117,6 +117,6 @@ export const ASSIGNMENT_PROJECTION = [
   'isActive',
   'dateCreated',
   'asset { id uuid name serialNumber }',
-  'assignedTo { id uuid username lastName otherNames }',
-  'assignedBy { id uuid username lastName otherNames }',
+  'assignedTo { id username lastName otherNames }',
+  'assignedBy { id username lastName otherNames }',
 ];

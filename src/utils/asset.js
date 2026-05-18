@@ -10,5 +10,5 @@ export function assetLabel(asset) {
  * True when the assignee object refers to a real user.
  */
 export function hasAssignee(asset) {
-  return !!asset?.assignedTo?.uuid;
+  return !!asset?.assignedTo?.id;
 }

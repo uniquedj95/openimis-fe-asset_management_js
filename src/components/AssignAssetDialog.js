@@ -15,6 +15,7 @@ import {
 import { withTheme, withStyles } from '@material-ui/core/styles';
 
 import {
+  decodeId,
   formatMessage,
   formatMessageWithValues,
   PublishedComponent,
@@ -84,10 +85,10 @@ function AssignAssetDialog({
   };
 
   const handleSubmit = () => {
-    if (!user?.uuid) return;
+    if (!user?.id) return;
     assignAsset(
       asset.uuid,
-      user.uuid,
+      decodeId(user.id),
       notes,
       force,
       formatMessageWithValues(intl, MODULE_NAME, 'asset.assign.mutationLabel', {
@@ -155,7 +156,7 @@ function AssignAssetDialog({
           onClick={handleSubmit}
           color="primary"
           variant="contained"
-          disabled={!user?.uuid}
+          disabled={!user?.id}
         >
           {formatMessage(intl, MODULE_NAME, 'assignDialog.submit')}
         </Button>
