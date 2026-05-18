@@ -127,7 +127,7 @@ function AssetSearcher({
     'asset.location',
     'asset.assignedTo',
     'asset.dateUpdated',
-    'emptyLabel',
+    'asset.actions',
   ];
 
   const formatAssignedTo = (asset) => {

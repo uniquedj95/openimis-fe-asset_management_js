@@ -65,6 +65,7 @@
       "dateUpdated": "Updated on",
       "isDeleted": "Show historical",
       "version": "Version",
+      "actions": "Actions",
 
       "code.alreadyTaken": "The code is already taken",
       "serialNumber.alreadyTaken": "The serial number is already taken",
