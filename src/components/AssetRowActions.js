@@ -58,21 +58,25 @@ export default function buildAssetRowActions({
 
   const stop = (e) => { e?.stopPropagation?.(); };
 
-  const view = (asset) => (
-    <Tooltip title={t('tooltip.view')}>
-      <IconButton
-        size="small"
-        onClick={(e) => {
-          stop(e);
-          historyPush(modulesManager, history, 'assetManagement.route.asset', [asset.id]);
-        }}
-      >
-        <VisibilityIcon />
-      </IconButton>
-    </Tooltip>
-  );
+  const view = (asset) => {
+    if (asset.isDeleted) return null;
+    return (
+      <Tooltip title={t('tooltip.view')}>
+        <IconButton
+          size="small"
+          onClick={(e) => {
+            stop(e);
+            historyPush(modulesManager, history, 'assetManagement.route.asset', [asset.id]);
+          }}
+        >
+          <VisibilityIcon />
+        </IconButton>
+      </Tooltip>
+    );
+  };
 
   const assign = (asset) => {
+    if (asset.isDeleted) return null;
     if (!onAssign) return null;
     if (!rights.includes(RIGHT_ASSET_ASSIGN)) return null;
     if (!canTransition(asset.status?.code, ASSET_STATUS.ASSIGNED)) return null;
@@ -89,6 +93,7 @@ export default function buildAssetRowActions({
   };
 
   const unassign = (asset) => {
+    if (asset.isDeleted) return null;
     if (!onUnassign) return null;
     if (!rights.includes(RIGHT_ASSET_UNASSIGN)) return null;
     if (asset.status?.code !== ASSET_STATUS.ASSIGNED) return null;
@@ -111,6 +116,7 @@ export default function buildAssetRowActions({
     tooltipKey,
   }) {
     function transitionFormatter(asset) {
+      if (asset.isDeleted) return null;
       if (!onTransition) return null;
       if (rightCode != null && !rights.includes(rightCode)) return null;
       if (!canTransition(asset.status?.code, target)) return null;

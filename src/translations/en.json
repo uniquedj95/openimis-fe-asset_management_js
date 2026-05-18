@@ -75,6 +75,7 @@
       "status.repair": "In repair",
       "status.retired": "Retired",
       "status.lost": "Lost",
+      "status.deleted": "Deleted",
       "status.null": "Any",
 
       "deviceType.phone": "Phone",

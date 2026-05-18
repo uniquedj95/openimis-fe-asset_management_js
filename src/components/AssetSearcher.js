@@ -150,6 +150,7 @@ function AssetSearcher({
   });
 
   const formatStatus = (asset) => {
+    if (asset.isDeleted) return formatMessage(intl, MODULE_NAME, 'asset.status.deleted');
     if (!asset.status) return '';
     const key = `asset.status.${asset.status.code}`;
     const translated = formatMessage(intl, MODULE_NAME, key);
@@ -200,7 +201,7 @@ function AssetSearcher({
   const isRowDisabled = (_, asset) => deletedAssetUuids.includes(asset.id);
 
   const defaultFilters = () => ({
-    isDeleted: { value: false, filter: 'isDeleted: false' },
+    showHistory: { value: false, filter: 'showHistory: false' },
     ...(callerDefaultFilters || {}),
   });
 
