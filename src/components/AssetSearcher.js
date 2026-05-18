@@ -27,7 +27,6 @@ import {
   transitionAssetStatus,
 } from '../actions';
 import useAssetActions from '../hooks/useAssetActions';
-import AssetIcon from '../displays/AssetIcon';
 import AssetFilter from './AssetFilter';
 import buildAssetRowActions from './AssetRowActions';
 import AssignAssetDialog from './AssignAssetDialog';
@@ -121,9 +120,9 @@ function AssetSearcher({
   };
 
   const headers = () => [
-    'asset.deviceType',
     'asset.name',
     'asset.serialNumber',
+    'asset.deviceType',
     'asset.status',
     'asset.location',
     'asset.assignedTo',
@@ -161,9 +160,9 @@ function AssetSearcher({
   };
 
   const itemFormatters = () => [
-    (asset) => <AssetIcon deviceType={asset.deviceType?.code} />,
     (asset) => asset.name,
     (asset) => asset.serialNumber,
+    (asset) => asset.deviceType?.name ?? asset.deviceType?.code ?? '',
     (asset) => formatStatus(asset),
     (asset) => asset.location?.name ?? '',
     (asset) => formatAssignedTo(asset),
@@ -179,9 +178,9 @@ function AssetSearcher({
   ];
 
   const sorts = () => [
-    ['deviceType', true],
     ['name', true],
     ['serialNumber', true],
+    ['deviceType', true],
     ['status', true],
     ['location', true],
     ['assignedTo', true],
