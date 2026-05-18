@@ -28,7 +28,6 @@ import {
 } from '../constants';
 import { canTransition, isTerminal } from '../utils/statusFsm';
 import { deleteAsset, transitionAssetStatus } from '../actions';
-import { assetUuid } from '../utils/asset';
 import useAssetActions from '../hooks/useAssetActions';
 import AssetMasterPanel from './AssetMasterPanel';
 import AssetAssignmentPanel from './AssetAssignmentPanel';
@@ -53,7 +52,7 @@ function AssetForm({
   deleteAsset, transitionAssetStatus,
 }) {
   const classes = useStyles();
-  const isEdit = !!(asset?.id || asset?.uuid);
+  const isEdit = !!asset?.uuid;
   const titleKey = isEdit ? 'assetPage.title.edit' : 'assetPage.title.create';
 
   const [openAssign, setOpenAssign] = useState(false);
@@ -90,7 +89,7 @@ function AssetForm({
     onTransition: (asset, target) => {
       const statusLabel = formatMessage(intl, MODULE_NAME, `asset.status.${target}`);
       transitionAssetStatus(
-        assetUuid(asset),
+        asset.uuid,
         target,
         null,
         formatMessage(intl, MODULE_NAME, 'asset.transition.mutationLabel', {
@@ -169,7 +168,7 @@ function AssetForm({
         }}
         readOnly={readOnly}
         edited={edited}
-        edited_id={edited?.uuid ?? edited?.id}
+        edited_id={edited?.uuid}
         canSave={canSave}
         onEditedChanged={onChange}
         HeadPanel={AssetMasterPanel}

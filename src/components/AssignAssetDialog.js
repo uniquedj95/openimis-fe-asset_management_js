@@ -26,7 +26,7 @@ import {
 import { assignAsset } from '../actions';
 import { MODULE_NAME, RIGHT_ASSET_ASSIGN } from '../constants';
 import { defaultDialogStyles } from '../util/styles';
-import { assetLabel, assetUuid } from '../utils/asset';
+import { assetLabel } from '../utils/asset';
 
 /**
  * AssignAssetDialog
@@ -34,7 +34,7 @@ import { assetLabel, assetUuid } from '../utils/asset';
  * Modal that captures the user to assign an asset to, optional notes, and an
  * optional "force reassign" flag (visible only when the asset already has an
  * assignee AND the current user has RIGHT_ASSET_ASSIGN). On submit it
- * dispatches `assignAsset(assetUuid, userUuid, notes, force)` with a
+ * dispatches `assignAsset(asset.uuid, user.uuid, notes, force)` with a
  * localized clientMutationLabel.
  *
  * Props:
@@ -68,7 +68,7 @@ function AssignAssetDialog({
       setNotes('');
       setForce(false);
     }
-  }, [asset?.id]);
+  }, [asset?.uuid]);
 
   // Journalize after mutation completes
   useEffect(() => {
@@ -84,10 +84,10 @@ function AssignAssetDialog({
   };
 
   const handleSubmit = () => {
-    if (!user?.uuid && !user?.id) return;
+    if (!user?.uuid) return;
     assignAsset(
-      assetUuid(asset),
-      user.uuid || user.id,
+      asset.uuid,
+      user.uuid,
       notes,
       force,
       formatMessageWithValues(intl, MODULE_NAME, 'asset.assign.mutationLabel', {
@@ -155,7 +155,7 @@ function AssignAssetDialog({
           onClick={handleSubmit}
           color="primary"
           variant="contained"
-          disabled={!user?.uuid && !user?.id}
+          disabled={!user?.uuid}
         >
           {formatMessage(intl, MODULE_NAME, 'assignDialog.submit')}
         </Button>

@@ -64,7 +64,7 @@ export default function buildAssetRowActions({
         size="small"
         onClick={(e) => {
           stop(e);
-          historyPush(modulesManager, history, 'assetManagement.route.asset', [asset.id]);
+          historyPush(modulesManager, history, 'assetManagement.route.asset', [asset.uuid]);
         }}
       >
         <VisibilityIcon />
