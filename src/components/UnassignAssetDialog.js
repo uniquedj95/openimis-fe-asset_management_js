@@ -23,13 +23,13 @@ import {
 import { unassignAsset } from '../actions';
 import { MODULE_NAME } from '../constants';
 import { defaultDialogStyles } from '../util/styles';
-import { assetLabel, assetUuid } from '../utils/asset';
+import { assetLabel } from '../utils/asset';
 
 /**
  * UnassignAssetDialog
  *
  * Simple confirmation modal with an optional notes field. On submit it
- * dispatches `unassignAsset(assetUuid, notes)`.
+ * dispatches `unassignAsset(asset.uuid, notes)`.
  */
 function UnassignAssetDialog({
   intl,
@@ -47,7 +47,7 @@ function UnassignAssetDialog({
 
   useEffect(() => {
     if (open) setNotes('');
-  }, [asset?.id]);
+  }, [asset?.uuid]);
 
   // Journalize after mutation completes
   useEffect(() => {
@@ -62,7 +62,7 @@ function UnassignAssetDialog({
 
   const handleSubmit = () => {
     unassignAsset(
-      assetUuid(asset),
+      asset.uuid,
       notes,
       formatMessageWithValues(intl, MODULE_NAME, 'asset.unassign.mutationLabel', {
         serialNumber: assetLabel(asset),

@@ -95,12 +95,12 @@ function AssetSearcher({
         asset,
         formatMessage(intl, MODULE_NAME, 'asset.delete.mutationLabel'),
       );
-      setDeletedAssetUuids([...deletedAssetUuids, asset.id]);
+      setDeletedAssetUuids([...deletedAssetUuids, asset.uuid]);
     },
     onTransition: (asset, target) => {
       const statusLabel = formatMessage(intl, MODULE_NAME, `asset.status.${target}`);
       transitionAssetStatus(
-        asset.id,
+        asset.uuid,
         target,
         null,
         formatMessage(intl, MODULE_NAME, 'asset.transition.mutationLabel', {
@@ -192,13 +192,13 @@ function AssetSearcher({
     modulesManager,
     history,
     'assetManagement.route.asset',
-    [asset?.id],
+    [asset?.uuid],
     newTab,
   );
 
-  const rowIdentifier = (asset) => asset.id;
+  const rowIdentifier = (asset) => asset.uuid;
 
-  const isRowDisabled = (_, asset) => deletedAssetUuids.includes(asset.id);
+  const isRowDisabled = (_, asset) => deletedAssetUuids.includes(asset.uuid);
 
   const defaultFilters = () => ({
     showHistory: { value: false, filter: 'showHistory: false' },

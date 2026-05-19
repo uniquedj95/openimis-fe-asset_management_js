@@ -92,6 +92,7 @@ export const DEVICE_TYPES = [DEVICE_TYPE.PHONE, DEVICE_TYPE.TABLET];
 // Mirrors the AssetGQLType exposed by openimis-be-asset.
 export const ASSET_PROJECTION = [
   'id',
+  'uuid',
   'name',
   'serialNumber',
   'imei',
@@ -109,12 +110,13 @@ export const ASSET_PROJECTION = [
 
 export const ASSIGNMENT_PROJECTION = [
   'id',
+  'uuid',
   'notes',
   'assignedDate',
   'returnedDate',
   'isActive',
   'dateCreated',
-  'asset { id name serialNumber }',
+  'asset { id uuid name serialNumber }',
   'assignedTo { id username lastName otherNames }',
   'assignedBy { id username lastName otherNames }',
 ];

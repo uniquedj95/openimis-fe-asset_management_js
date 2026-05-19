@@ -29,9 +29,9 @@ import AssetForm from '../components/AssetForm';
 /**
  * AssetPage
  *
- * Single-asset create / edit page. The route param `:asset_uuid?` is the relay
- * id pushed by the list page; `fetchAsset` decodes it before querying. Dirty
- * tracking and Save/Cancel are owned by the embedded `<Form>` (see AssetForm).
+ * Single-asset create / edit page. The route param `:asset_uuid?` is the raw
+ * UUID pushed by the list page. Dirty tracking and Save/Cancel are owned by
+ * the embedded `<Form>` (see AssetForm).
  *
  * Lifecycle:
  *   1. Mount → dispatch `fetchAsset(uuid)` (no-op when `uuid` is absent).
@@ -108,8 +108,8 @@ function AssetPage({
 
   const canSave = useMemo(() => () => {
     if (!edited?.name || !edited?.serialNumber) return false;
-    if (!edited?.deviceType?.code && !edited?.deviceType?.id) return false;
-    if (!edited?.location?.id) return false;
+    if (!edited?.deviceType?.code) return false;
+    if (!edited?.location) return false;
     return !submittingMutation;
   }, [edited, submittingMutation]);
 
