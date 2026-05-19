@@ -133,7 +133,7 @@ function AssetMasterPanel({
             onChange={(location) => onEditedChanged({ ...edited, location })}
           />
         </Grid>
-        {edited?.id && (
+        {edited?.uuid && (
           <>
             <Grid item xs={4} className={classes.item}>
               <TextInput

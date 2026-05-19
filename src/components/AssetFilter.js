@@ -44,11 +44,6 @@ function AssetFilter({
     ]);
   };
 
-  const onChangeCheckbox = (name) => (event) => {
-    const value = event.target.checked;
-    onChangeFilters([{ id: name, value, filter: `${name}: ${value}` }]);
-  };
-
   return (
     <Grid container className={classes.form}>
       <Grid item xs={2} className={classes.item}>
@@ -135,8 +130,12 @@ function AssetFilter({
           control={(
             <Checkbox
               color="primary"
-              checked={!!filterValue('isDeleted')}
-              onChange={onChangeCheckbox('isDeleted')}
+              checked={!!filterValue('showHistory')}
+              onChange={(e) => onChangeFilters([{
+                id: 'showHistory',
+                value: e.target.checked,
+                filter: `showHistory: ${e.target.checked}`,
+              }])}
             />
           )}
           label={formatMessage(intl, MODULE_NAME, 'asset.isDeleted')}

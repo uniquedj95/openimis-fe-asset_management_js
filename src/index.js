@@ -12,7 +12,6 @@ import DeviceTypePicker from './pickers/DeviceTypePicker';
 import AssetStatusPicker from './pickers/AssetStatusPicker';
 import AssignmentActionPicker from './pickers/AssignmentActionPicker';
 import AssetPicker from './pickers/AssetPicker';
-import AssetIcon from './displays/AssetIcon';
 import AssetsPage from './pages/AssetsPage';
 import AssetPage from './pages/AssetPage';
 import {
@@ -48,7 +47,6 @@ const DEFAULT_CONFIG = {
     { key: 'assetManagement.AssetStatusPicker', ref: AssetStatusPicker },
     { key: 'assetManagement.AssignmentActionPicker', ref: AssignmentActionPicker },
     { key: 'assetManagement.AssetPicker', ref: AssetPicker },
-    { key: 'assetManagement.AssetIcon', ref: AssetIcon },
   ],
 };
 

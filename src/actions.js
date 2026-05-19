@@ -12,7 +12,6 @@ import { ASSET_PROJECTION, ASSIGNMENT_PROJECTION, ASSET_STATUS } from './constan
 import {
   REQUEST, SUCCESS, ERROR, CLEAR,
 } from './utils/action-type';
-import { asUuid } from './utils/asset';
 
 /**
  * Fetch a paginated, filtered list of assets.
@@ -28,19 +27,13 @@ export function fetchAssets(params) {
 }
 
 /**
- * Fetch a single asset by its raw UUID (or relay-encoded id).
- *
- * Re-uses the `assets` connection filtered by `id` since the backend does not
- * expose a stand-alone `asset(uuid: ...)` field. The reducer pulls the first
- * edge into `state.asset`. Returns a no-op CLEAR when `uuid` is falsy so the
- * page works in create mode without firing a request.
+ * Fetch a single asset by its UUID.
  */
 export function fetchAsset(uuid) {
-  const raw = asUuid(uuid);
-  if (!raw) {
+  if (!uuid) {
     return { type: CLEAR(ACTION_TYPE.GET_ASSET) };
   }
-  const payload = formatPageQuery('assets', [`id: "${raw}"`], ASSET_PROJECTION);
+  const payload = formatPageQuery('assets', [`id: "${uuid}"`], ASSET_PROJECTION);
   return graphql(payload, ACTION_TYPE.GET_ASSET);
 }
 
@@ -109,8 +102,7 @@ export function createAsset(asset, clientMutationLabel) {
 }
 
 export function updateAsset(asset, clientMutationLabel) {
-  const uuid = asUuid(asset.uuid || asset.id);
-  const input = `uuid: "${uuid}"\n${buildAssetMutationInput(asset)}`;
+  const input = `uuid: "${asset.uuid}"\n${buildAssetMutationInput(asset)}`;
   const mutation = formatMutation('updateAsset', input, clientMutationLabel);
   const requestedDateTime = new Date();
   return graphql(
@@ -126,8 +118,7 @@ export function updateAsset(asset, clientMutationLabel) {
 }
 
 export function deleteAsset(asset, clientMutationLabel) {
-  const uuid = asUuid(asset?.uuid || asset?.id);
-  const input = `uuid: "${uuid}"`;
+  const input = `uuid: "${asset.uuid}"`;
   const mutation = formatMutation('deleteAsset', input, clientMutationLabel);
   const requestedDateTime = new Date();
   return graphql(
@@ -144,15 +135,11 @@ export function deleteAsset(asset, clientMutationLabel) {
 
 /**
  * Assign an asset to a user.
- *
- * `assetUuid` and `userUuid` may be raw UUIDs or relay-encoded ids; both are
- * decoded before being sent. The `force` flag is reserved for a future backend
- * extension and is currently a no-op.
  */
 export function assignAsset(assetUuid, userUuid, notes, _force, clientMutationLabel) {
   const input = `
-    uuid: "${asUuid(assetUuid)}"
-    userUuid: "${asUuid(userUuid)}"
+    uuid: "${assetUuid}"
+    userUuid: "${userUuid}"
     ${notes ? `notes: "${formatGQLString(notes)}"` : ''}
   `;
   const mutation = formatMutation('assignAsset', input, clientMutationLabel);
@@ -171,7 +158,7 @@ export function assignAsset(assetUuid, userUuid, notes, _force, clientMutationLa
 
 export function unassignAsset(assetUuid, notes, clientMutationLabel) {
   const input = `
-    uuid: "${asUuid(assetUuid)}"
+    uuid: "${assetUuid}"
     ${notes ? `notes: "${formatGQLString(notes)}"` : ''}
   `;
   const mutation = formatMutation('unassignAsset', input, clientMutationLabel);
@@ -217,7 +204,7 @@ export function transitionAssetStatus(assetUuid, targetStatus, notes, clientMuta
     };
   }
   const input = `
-    uuid: "${asUuid(assetUuid)}"
+    uuid: "${assetUuid}"
     ${notes ? `notes: "${formatGQLString(notes)}"` : ''}
   `;
   const mutation = formatMutation(mutationName, input, clientMutationLabel);

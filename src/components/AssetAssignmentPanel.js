@@ -13,7 +13,6 @@ import {
 
 import { MODULE_NAME, DEFAULT_PAGE_SIZE, ROWS_PER_PAGE_OPTIONS } from '../constants';
 import { fetchAssignmentHistory } from '../actions';
-import { assetUuid } from '../utils/asset';
 
 const styles = (theme) => ({
   item: theme.paper.item,
@@ -37,7 +36,7 @@ function AssetAssignmentPanel({
   assetHistory, assetHistoryPageInfo, assetHistoryTotalCount,
   fetchAssignmentHistory,
 }) {
-  const uuid = assetUuid(edited);
+  const uuid = edited?.uuid;
 
   if (!uuid) return null;
 
@@ -71,7 +70,7 @@ function AssetAssignmentPanel({
     null,
   ];
 
-  const rowIdentifier = (row) => row.id;
+  const rowIdentifier = (row) => row.uuid;
 
   return (
     <div className={classes.paper}>
