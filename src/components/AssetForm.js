@@ -62,16 +62,17 @@ function AssetForm({
   const currentStatus = edited?.status?.code;
   const terminal = isTerminal(currentStatus);
   const assignee = edited?.assignedTo;
+  const canEdit = isEdit && !terminal;
 
-  const canMaintenance = isEdit && !terminal
+  const canMaintenance = canEdit
     && rights?.includes(RIGHT_ASSET_MAINTENANCE)
     && canTransition(currentStatus, ASSET_STATUS.REPAIR);
-  const canRetire = isEdit && !terminal
+  const canRetire = canEdit
     && rights?.includes(RIGHT_ASSET_RETIRE)
     && canTransition(currentStatus, ASSET_STATUS.RETIRED);
-  const canDelete = isEdit && !terminal && rights?.includes(RIGHT_ASSET_DELETE);
-  const canAssign = isEdit && !terminal && rights?.includes(RIGHT_ASSET_ASSIGN);
-  const canUnassign = isEdit && !terminal && !!assignee && rights?.includes(RIGHT_ASSET_UNASSIGN);
+  const canDelete = canEdit && rights?.includes(RIGHT_ASSET_DELETE);
+  const canAssign = canEdit && rights?.includes(RIGHT_ASSET_ASSIGN);
+  const canUnassign = canEdit && !!assignee && rights?.includes(RIGHT_ASSET_UNASSIGN);
 
   const {
     openDeleteConfirm,
