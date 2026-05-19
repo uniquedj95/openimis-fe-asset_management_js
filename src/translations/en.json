@@ -154,7 +154,7 @@
           "title": "Mark asset {serialNumber} as lost"
         },
         "notes": {
-          "label": "Reason",
+          "label": "Notes",
           "required": "Notes are required for auditing purposes"
         },
         "confirm": "Confirm"
