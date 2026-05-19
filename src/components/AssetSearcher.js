@@ -27,7 +27,6 @@ import {
   transitionAssetStatus,
 } from '../actions';
 import useAssetActions from '../hooks/useAssetActions';
-import AssetIcon from '../displays/AssetIcon';
 import AssetFilter from './AssetFilter';
 import buildAssetRowActions from './AssetRowActions';
 import AssignAssetDialog from './AssignAssetDialog';
@@ -121,14 +120,14 @@ function AssetSearcher({
   };
 
   const headers = () => [
-    'asset.deviceType',
     'asset.name',
     'asset.serialNumber',
+    'asset.deviceType',
     'asset.status',
     'asset.location',
     'asset.assignedTo',
     'asset.dateUpdated',
-    'emptyLabel',
+    'asset.actions',
   ];
 
   const formatAssignedTo = (asset) => {
@@ -151,6 +150,7 @@ function AssetSearcher({
   });
 
   const formatStatus = (asset) => {
+    if (asset.isDeleted) return formatMessage(intl, MODULE_NAME, 'asset.status.deleted');
     if (!asset.status) return '';
     const key = `asset.status.${asset.status.code}`;
     const translated = formatMessage(intl, MODULE_NAME, key);
@@ -161,9 +161,9 @@ function AssetSearcher({
   };
 
   const itemFormatters = () => [
-    (asset) => <AssetIcon deviceType={asset.deviceType?.code} />,
     (asset) => asset.name,
     (asset) => asset.serialNumber,
+    (asset) => asset.deviceType?.name ?? asset.deviceType?.code ?? '',
     (asset) => formatStatus(asset),
     (asset) => asset.location?.name ?? '',
     (asset) => formatAssignedTo(asset),
@@ -179,9 +179,9 @@ function AssetSearcher({
   ];
 
   const sorts = () => [
-    ['deviceType', true],
     ['name', true],
     ['serialNumber', true],
+    ['deviceType', true],
     ['status', true],
     ['location', true],
     ['assignedTo', true],
@@ -201,7 +201,7 @@ function AssetSearcher({
   const isRowDisabled = (_, asset) => deletedAssetUuids.includes(asset.uuid);
 
   const defaultFilters = () => ({
-    isDeleted: { value: false, filter: 'isDeleted: false' },
+    showHistory: { value: false, filter: 'showHistory: false' },
     ...(callerDefaultFilters || {}),
   });
 
