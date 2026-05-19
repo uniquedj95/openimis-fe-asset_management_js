@@ -33,6 +33,7 @@ import AssetMasterPanel from './AssetMasterPanel';
 import AssetAssignmentPanel from './AssetAssignmentPanel';
 import AssignAssetDialog from './AssignAssetDialog';
 import UnassignAssetDialog from './UnassignAssetDialog';
+import TransitionDialog from './TransitionDialog';
 
 const useStyles = makeStyles((theme) => ({
   page: theme.page,
@@ -61,20 +62,25 @@ function AssetForm({
   const currentStatus = edited?.status?.code;
   const terminal = isTerminal(currentStatus);
   const assignee = edited?.assignedTo;
+  const canEdit = isEdit && !terminal;
 
-  const canMaintenance = isEdit && !terminal
+  const canMaintenance = canEdit
     && rights?.includes(RIGHT_ASSET_MAINTENANCE)
     && canTransition(currentStatus, ASSET_STATUS.REPAIR);
-  const canRetire = isEdit && !terminal
+  const canRetire = canEdit
     && rights?.includes(RIGHT_ASSET_RETIRE)
     && canTransition(currentStatus, ASSET_STATUS.RETIRED);
-  const canDelete = isEdit && !terminal && rights?.includes(RIGHT_ASSET_DELETE);
-  const canAssign = isEdit && !terminal && rights?.includes(RIGHT_ASSET_ASSIGN);
-  const canUnassign = isEdit && !terminal && !!assignee && rights?.includes(RIGHT_ASSET_UNASSIGN);
+  const canDelete = canEdit && rights?.includes(RIGHT_ASSET_DELETE);
+  const canAssign = canEdit && rights?.includes(RIGHT_ASSET_ASSIGN);
+  const canUnassign = canEdit && !!assignee && rights?.includes(RIGHT_ASSET_UNASSIGN);
 
   const {
     openDeleteConfirm,
     openTransitionConfirm,
+    pendingTransition,
+    isTerminalTransition,
+    handleTransitionConfirm,
+    closeTransitionDialog,
   } = useAssetActions({
     intl,
     coreConfirm,
@@ -86,12 +92,12 @@ function AssetForm({
         formatMessage(intl, MODULE_NAME, 'asset.delete.mutationLabel'),
       );
     },
-    onTransition: (asset, target) => {
+    onTransition: (asset, target, notes) => {
       const statusLabel = formatMessage(intl, MODULE_NAME, `asset.status.${target}`);
       transitionAssetStatus(
         asset.uuid,
         target,
-        null,
+        notes,
         formatMessage(intl, MODULE_NAME, 'asset.transition.mutationLabel', {
           status: statusLabel,
         }),
@@ -188,6 +194,15 @@ function AssetForm({
       <UnassignAssetDialog
         asset={openUnassign ? edited : null}
         onClose={() => setOpenUnassign(false)}
+      />
+      <TransitionDialog
+        open={!!pendingTransition}
+        onClose={closeTransitionDialog}
+        onConfirm={handleTransitionConfirm}
+        titleKey={`dialog.transition.${pendingTransition?.target}.title`}
+        asset={pendingTransition?.asset}
+        submittingMutation={submittingMutation}
+        isTerminal={pendingTransition?.target ? isTerminalTransition(pendingTransition.target) : false}
       />
     </div>
   );

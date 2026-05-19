@@ -4,7 +4,7 @@ import {
   formatMessageWithValues,
 } from '@openimis/fe-core';
 
-import { MODULE_NAME } from '../constants';
+import { MODULE_NAME, TERMINAL_STATUSES } from '../constants';
 
 /**
  * useAssetActions
@@ -42,10 +42,12 @@ export default function useAssetActions({
   mutation,
 }) {
   const [pendingDelete, setPendingDelete] = useState(null);
-  const [pendingTransition, setPendingTransition] = useState(null); // { asset, target }
+  const [pendingTransition, setPendingTransition] = useState(null); // { asset, target } for dialog
   const prevSubmittingRef = useRef();
 
   const getAssetLabel = (asset) => asset?.serialNumber || '';
+
+  const isTerminalTransition = (target) => TERMINAL_STATUSES.includes(target);
 
   const openDeleteConfirm = (asset) => {
     setPendingDelete(asset);
@@ -59,33 +61,29 @@ export default function useAssetActions({
   };
 
   const openTransitionConfirm = (asset, target) => {
+    // All transitions now use the TransitionDialog
     setPendingTransition({ asset, target });
-    const statusLabel = formatMessage(intl, MODULE_NAME, `asset.status.${target}`);
-    coreConfirmAction(
-      formatMessageWithValues(intl, MODULE_NAME, 'asset.transition.confirm.title', {
-        status: statusLabel,
-      }),
-      formatMessageWithValues(intl, MODULE_NAME, 'asset.transition.confirm.message', {
-        serialNumber: getAssetLabel(asset),
-        name: asset?.name ?? '',
-        status: statusLabel,
-      }),
-    );
   };
 
-  // Handle confirmed actions: dispatch the mutation and clear pending state
-  useEffect(() => {
-    if (confirmed) {
-      if (pendingDelete && onDeleteAsset) {
-        onDeleteAsset(pendingDelete);
-      } else if (pendingTransition && onTransition) {
-        onTransition(pendingTransition.asset, pendingTransition.target);
-      }
-      setPendingDelete(null);
+  const handleTransitionConfirm = (notes) => {
+    if (pendingTransition && onTransition) {
+      onTransition(pendingTransition.asset, pendingTransition.target, notes);
       setPendingTransition(null);
+    }
+  };
+
+  const closeTransitionDialog = () => {
+    setPendingTransition(null);
+  };
+
+  // Handle confirmed delete actions
+  useEffect(() => {
+    if (confirmed && pendingDelete && onDeleteAsset) {
+      onDeleteAsset(pendingDelete);
+      setPendingDelete(null);
       clearConfirmAction(false);
     }
-  }, [confirmed, pendingDelete, pendingTransition, onDeleteAsset, onTransition, clearConfirmAction]);
+  }, [confirmed, pendingDelete, onDeleteAsset, clearConfirmAction]);
 
   // Journalize after mutation completes
   useEffect(() => {
@@ -101,5 +99,8 @@ export default function useAssetActions({
     openTransitionConfirm,
     pendingDelete,
     pendingTransition,
+    isTerminalTransition,
+    handleTransitionConfirm,
+    closeTransitionDialog,
   };
 }

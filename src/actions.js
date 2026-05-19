@@ -179,29 +179,23 @@ export function unassignAsset(assetUuid, notes, clientMutationLabel) {
 // Status transitions
 // --------------------------------------------------------------------------- //
 
+// FSM target status → backend mutation name mapping.
 const TRANSITION_MUTATIONS = {
   [ASSET_STATUS.REPAIR]: 'markAssetForRepair',
   [ASSET_STATUS.RETIRED]: 'retireAsset',
+  [ASSET_STATUS.LOST]: 'markAssetLost',
 };
 
 /**
  * Dispatch the appropriate backend mutation for the requested target status.
  *
- * The backend exposes dedicated mutations only for `repair` and `retired`.
- * Other targets (return-to-available, mark-lost) are not yet supported and
- * resolve to a no-op error action so the UI can surface a friendly message.
+ * The backend exposes dedicated mutations for `repair`, `retired`, and `lost`.
+ * Return-to-available transitions are handled by unassignAsset separately.
  */
 export function transitionAssetStatus(assetUuid, targetStatus, notes, clientMutationLabel) {
   const mutationName = TRANSITION_MUTATIONS[targetStatus];
   if (!mutationName) {
-    return {
-      type: ERROR(ACTION_TYPE.MUTATION),
-      payload: { message: `Transition to "${targetStatus}" is not supported by the backend.` },
-      meta: {
-        actionType: ACTION_TYPE.TRANSITION_ASSET,
-        clientMutationLabel,
-      },
-    };
+    throw new Error(`Unsupported transition target: ${targetStatus}`);
   }
   const input = `
     uuid: "${assetUuid}"

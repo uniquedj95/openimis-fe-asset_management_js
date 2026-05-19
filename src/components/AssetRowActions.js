@@ -135,16 +135,15 @@ export default function buildAssetRowActions({
   }
 
   const sendToMaintenance = transitionButton({
-    target: ASSET_STATUS.MAINTENANCE,
+    target: ASSET_STATUS.REPAIR,
     rightCode: RIGHT_ASSET_MAINTENANCE,
     icon: <BuildIcon />,
     tooltipKey: 'transition.tooltip.sendToMaintenance',
   });
 
   const returnToStock = transitionButton({
-    target: ASSET_STATUS.IN_STOCK,
-    // No dedicated right; reuse maintenance/assign permissions implicitly via FSM.
-    // Allow if the user can either assign or send to maintenance (covers operational roles).
+    target: ASSET_STATUS.AVAILABLE,
+    // No dedicated right check; FSM controls which statuses can transition to AVAILABLE.
     rightCode: null,
     icon: <UnarchiveIcon />,
     tooltipKey: 'transition.tooltip.moveToInStock',

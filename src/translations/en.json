@@ -141,8 +141,23 @@
         "message": "Are you sure you want to unassign this asset?"
       },
       "transition": {
-        "title": "Change status to {status}",
-        "message": "Confirm changing the status of {code} {name} to {status}."
+        "available": {
+          "title": "Move asset {serialNumber} to stock"
+        },
+        "repair": {
+          "title": "Send asset {serialNumber} to repair"
+        },
+        "retired": {
+          "title": "Retire asset {serialNumber}"
+        },
+        "lost": {
+          "title": "Mark asset {serialNumber} as lost"
+        },
+        "notes": {
+          "label": "Notes",
+          "required": "Notes are required for auditing purposes"
+        },
+        "confirm": "Confirm"
       },
       "confirm": "Confirm",
       "cancel": "Cancel"

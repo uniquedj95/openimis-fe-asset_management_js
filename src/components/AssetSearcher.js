@@ -31,6 +31,7 @@ import AssetFilter from './AssetFilter';
 import buildAssetRowActions from './AssetRowActions';
 import AssignAssetDialog from './AssignAssetDialog';
 import UnassignAssetDialog from './UnassignAssetDialog';
+import TransitionDialog from './TransitionDialog';
 
 /**
  * AssetSearcher
@@ -85,6 +86,10 @@ function AssetSearcher({
   const {
     openDeleteConfirm,
     openTransitionConfirm,
+    pendingTransition,
+    isTerminalTransition,
+    handleTransitionConfirm,
+    closeTransitionDialog,
   } = useAssetActions({
     intl,
     coreConfirm,
@@ -97,12 +102,12 @@ function AssetSearcher({
       );
       setDeletedAssetUuids([...deletedAssetUuids, asset.uuid]);
     },
-    onTransition: (asset, target) => {
+    onTransition: (asset, target, notes) => {
       const statusLabel = formatMessage(intl, MODULE_NAME, `asset.status.${target}`);
       transitionAssetStatus(
         asset.uuid,
         target,
-        null,
+        notes,
         formatMessage(intl, MODULE_NAME, 'asset.transition.mutationLabel', {
           status: statusLabel,
         }),
@@ -241,6 +246,15 @@ function AssetSearcher({
       <UnassignAssetDialog
         asset={assetToUnassign}
         onClose={() => setAssetToUnassign(null)}
+      />
+      <TransitionDialog
+        open={!!pendingTransition}
+        onClose={closeTransitionDialog}
+        onConfirm={handleTransitionConfirm}
+        titleKey={`dialog.transition.${pendingTransition?.target}.title`}
+        asset={pendingTransition?.asset}
+        submittingMutation={submittingMutation}
+        isTerminal={pendingTransition?.target ? isTerminalTransition(pendingTransition.target) : false}
       />
     </>
   );
