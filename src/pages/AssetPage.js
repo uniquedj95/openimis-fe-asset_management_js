@@ -13,10 +13,12 @@ import {
   formatMessage,
   formatMessageWithValues,
   journalize,
+  coreAlert,
 } from '@openimis/fe-core';
 
 import {
   MODULE_NAME,
+  RIGHT_ASSET_SEARCH,
   RIGHT_ASSET_CREATE,
   RIGHT_ASSET_UPDATE,
 } from '../constants';
@@ -43,10 +45,11 @@ function AssetPage({
   intl, match, history, modulesManager, rights,
   asset, fetchingAsset, fetchedAsset, errorAsset,
   submittingMutation, mutation,
-  fetchAsset, clearAsset, createAsset, updateAsset, journalize,
+  fetchAsset, clearAsset, createAsset, updateAsset, journalize, coreAlert,
 }) {
   const uuidParam = match.params.asset_uuid;
   const isCreate = !uuidParam;
+  const canView = rights?.includes(RIGHT_ASSET_SEARCH);
   const canSubmit = isCreate
     ? rights?.includes(RIGHT_ASSET_CREATE)
     : rights?.includes(RIGHT_ASSET_UPDATE);
@@ -56,6 +59,18 @@ function AssetPage({
   const [resetKey, setResetKey] = useState(0);
   const [pendingRedirect, setPendingRedirect] = useState(false);
   const prevSubmittingRef = useRef();
+
+  // Redirect unauthorized users to home with error toast
+  useEffect(() => {
+    // Wait for rights to load (non-empty array)
+    if (rights.length > 0 && !canView) {
+      coreAlert(
+        formatMessage(intl, MODULE_NAME, 'error.insufficientRights'),
+        formatMessage(intl, MODULE_NAME, 'assetPage.helmet'),
+      );
+      historyPush(modulesManager, history, 'home');
+    }
+  }, [rights, canView]);
 
   useEffect(() => {
     if (uuidParam) fetchAsset(uuidParam);
@@ -113,6 +128,9 @@ function AssetPage({
     return !submittingMutation;
   }, [edited, submittingMutation]);
 
+  // Show nothing while auth is loading or user lacks view permission
+  if (rights.length === 0 || !canView) return null;
+
   return (
     <>
       <Helmet title={formatMessage(intl, MODULE_NAME, 'assetPage.helmet')} />
@@ -144,7 +162,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  fetchAsset, clearAsset, createAsset, updateAsset, journalize,
+  fetchAsset, clearAsset, createAsset, updateAsset, journalize, coreAlert,
 }, dispatch);
 
 export default withModulesManager(

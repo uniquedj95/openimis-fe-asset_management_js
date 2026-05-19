@@ -7,6 +7,10 @@
     "any": "Any",
     "emptyString": "",
 
+    "error": {
+      "insufficientRights": "You do not have the rights to access this page."
+    },
+
     "assetsPage": {
       "title": "Assets",
       "helmet": "Assets",
