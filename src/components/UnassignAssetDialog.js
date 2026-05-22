@@ -71,14 +71,21 @@ function UnassignAssetDialog({
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-      <DialogTitle>
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      fullWidth
+      maxWidth="sm"
+      aria-labelledby="unassign-dialog-title"
+      aria-describedby="unassign-dialog-content"
+    >
+      <DialogTitle id="unassign-dialog-title">
         {asset && formatMessageWithValues(intl, MODULE_NAME, 'unassignDialog.title', {
           serialNumber: assetLabel(asset),
           name: asset.name,
         })}
       </DialogTitle>
-      <DialogContent>
+      <DialogContent id="unassign-dialog-content">
         <DialogContentText>
           {formatMessage(intl, MODULE_NAME, 'unassignDialog.message')}
         </DialogContentText>

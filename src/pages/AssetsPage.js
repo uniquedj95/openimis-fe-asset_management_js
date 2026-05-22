@@ -56,7 +56,11 @@ function AssetsPage(props) {
       <AssetSearcher rights={rights} />
       {rights.includes(RIGHT_ASSET_CREATE) && withTooltip(
         <div className={classes.fab}>
-          <Fab color="primary" onClick={onAdd}>
+          <Fab
+            color="primary"
+            onClick={onAdd}
+            aria-label={formatMessage(intl, MODULE_NAME, 'assetsPage.newAsset.tooltip')}
+          >
             <AddIcon />
           </Fab>
         </div>,

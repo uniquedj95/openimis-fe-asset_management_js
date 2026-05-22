@@ -60,10 +60,12 @@ export default function buildAssetRowActions({
 
   const view = (asset) => {
     if (asset.isDeleted) return null;
+    const label = t('tooltip.view');
     return (
-      <Tooltip title={t('tooltip.view')}>
+      <Tooltip title={label}>
         <IconButton
           size="small"
+          aria-label={label}
           onClick={(e) => {
             stop(e);
             historyPush(modulesManager, history, 'assetManagement.route.asset', [asset.uuid]);
@@ -80,10 +82,12 @@ export default function buildAssetRowActions({
     if (!onAssign) return null;
     if (!rights.includes(RIGHT_ASSET_ASSIGN)) return null;
     if (!canTransition(asset.status?.code, ASSET_STATUS.ASSIGNED)) return null;
+    const label = t('transition.tooltip.assign');
     return (
-      <Tooltip title={t('transition.tooltip.assign')}>
+      <Tooltip title={label}>
         <IconButton
           size="small"
+          aria-label={label}
           onClick={(e) => { stop(e); onAssign(asset); }}
         >
           <PersonAddIcon />
@@ -97,10 +101,12 @@ export default function buildAssetRowActions({
     if (!onUnassign) return null;
     if (!rights.includes(RIGHT_ASSET_UNASSIGN)) return null;
     if (asset.status?.code !== ASSET_STATUS.ASSIGNED) return null;
+    const label = t('transition.tooltip.unassign');
     return (
-      <Tooltip title={t('transition.tooltip.unassign')}>
+      <Tooltip title={label}>
         <IconButton
           size="small"
+          aria-label={label}
           onClick={(e) => { stop(e); onUnassign(asset); }}
         >
           <PersonAddDisabledIcon />
@@ -120,10 +126,12 @@ export default function buildAssetRowActions({
       if (!onTransition) return null;
       if (rightCode != null && !rights.includes(rightCode)) return null;
       if (!canTransition(asset.status?.code, target)) return null;
+      const label = t(tooltipKey);
       return (
-        <Tooltip title={t(tooltipKey)}>
+        <Tooltip title={label}>
           <IconButton
             size="small"
+            aria-label={label}
             onClick={(e) => { stop(e); onTransition(asset, target); }}
           >
             {icon}
@@ -168,10 +176,12 @@ export default function buildAssetRowActions({
     if (!rights.includes(RIGHT_ASSET_DELETE)) return null;
     if (isTerminal(asset.status?.code)) return null;
     if (asset.isDeleted) return null;
+    const label = t('tooltip.delete');
     return (
-      <Tooltip title={t('tooltip.delete')}>
+      <Tooltip title={label}>
         <IconButton
           size="small"
+          aria-label={label}
           onClick={(e) => { stop(e); onDelete(asset); }}
         >
           <DeleteIcon />
