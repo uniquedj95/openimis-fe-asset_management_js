@@ -100,14 +100,21 @@ function AssignAssetDialog({
   const titleKey = isReassign ? 'assignDialog.reassignTitle' : 'assignDialog.title';
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-      <DialogTitle>
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      fullWidth
+      maxWidth="sm"
+      aria-labelledby="assign-dialog-title"
+      aria-describedby="assign-dialog-content"
+    >
+      <DialogTitle id="assign-dialog-title">
         {asset && formatMessageWithValues(intl, MODULE_NAME, titleKey, {
           serialNumber: assetLabel(asset),
           name: asset.name,
         })}
       </DialogTitle>
-      <DialogContent>
+      <DialogContent id="assign-dialog-content">
         <Grid container direction="column" spacing={2} className={classes.item}>
           {modulesManager.getRef('admin.UserPicker') && (
             <Grid item className={classes.item}>

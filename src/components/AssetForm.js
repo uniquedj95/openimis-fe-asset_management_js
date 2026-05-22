@@ -109,54 +109,69 @@ function AssetForm({
   });
 
   const formActions = [
-    { doIt: onReset, icon: <ReplayIcon />, onlyIfDirty: !readOnly },
+    {
+      doIt: onReset,
+      icon: <ReplayIcon />,
+      onlyIfDirty: !readOnly,
+      ariaLabel: formatMessage(intl, MODULE_NAME, 'button.reset'),
+    },
   ];
 
   if (canMaintenance) {
+    const label = formatMessage(intl, MODULE_NAME, 'transition.tooltip.sendToMaintenance');
     formActions.push({
       doIt: () => openTransitionConfirm(edited, ASSET_STATUS.REPAIR),
       icon: <BuildIcon />,
-      tooltip: formatMessage(intl, MODULE_NAME, 'transition.tooltip.sendToMaintenance'),
+      tooltip: label,
+      ariaLabel: label,
       label: <FormattedMessage module={MODULE_NAME} id="transition.sendToMaintenance" />,
       disabled: submittingMutation,
     });
   }
 
   if (canRetire) {
+    const label = formatMessage(intl, MODULE_NAME, 'transition.tooltip.retire');
     formActions.push({
       doIt: () => openTransitionConfirm(edited, ASSET_STATUS.RETIRED),
       icon: <ArchiveIcon />,
-      tooltip: formatMessage(intl, MODULE_NAME, 'transition.tooltip.retire'),
+      tooltip: label,
+      ariaLabel: label,
       label: <FormattedMessage module={MODULE_NAME} id="transition.retire" />,
       disabled: submittingMutation,
     });
   }
 
   if (canAssign) {
+    const label = formatMessage(intl, MODULE_NAME, 'transition.tooltip.assign');
     formActions.push({
       doIt: () => setOpenAssign(true),
       icon: <PersonAddIcon />,
-      tooltip: formatMessage(intl, MODULE_NAME, 'transition.tooltip.assign'),
+      tooltip: label,
+      ariaLabel: label,
       label: <FormattedMessage module={MODULE_NAME} id="transition.assign" />,
       disabled: submittingMutation,
     });
   }
 
   if (canUnassign) {
+    const label = formatMessage(intl, MODULE_NAME, 'transition.tooltip.unassign');
     formActions.push({
       doIt: () => setOpenUnassign(true),
       icon: <PersonAddDisabledIcon />,
-      tooltip: formatMessage(intl, MODULE_NAME, 'transition.tooltip.unassign'),
+      tooltip: label,
+      ariaLabel: label,
       label: <FormattedMessage module={MODULE_NAME} id="transition.unassign" />,
       disabled: submittingMutation,
     });
   }
 
   if (canDelete) {
+    const label = formatMessage(intl, MODULE_NAME, 'tooltip.delete');
     formActions.push({
       doIt: () => openDeleteConfirm(edited),
       icon: <DeleteIcon />,
-      tooltip: formatMessage(intl, MODULE_NAME, 'tooltip.delete'),
+      tooltip: label,
+      ariaLabel: label,
       label: <FormattedMessage module={MODULE_NAME} id="button.delete" />,
       disabled: submittingMutation,
     });

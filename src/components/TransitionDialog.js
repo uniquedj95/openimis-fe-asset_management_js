@@ -79,13 +79,15 @@ function TransitionDialog({
       classes={{ paper: classes.dialog }}
       maxWidth="sm"
       fullWidth
+      aria-labelledby="transition-dialog-title"
+      aria-describedby="transition-dialog-content"
     >
-      <DialogTitle>
+      <DialogTitle id="transition-dialog-title">
         {formatMessageWithValues(intl, MODULE_NAME, titleKey, {
           serialNumber: assetLabel(asset),
         })}
       </DialogTitle>
-      <DialogContent className={classes.content}>
+      <DialogContent id="transition-dialog-content" className={classes.content}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextInput
